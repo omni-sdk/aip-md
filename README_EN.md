@@ -342,7 +342,7 @@ Each instruction returns a unified result format:
 
 | Item | Info |
 |------|------|
-| Author | Shi Xingyue (史兴跃) |
+| Author | Shi XIngyue |
 | GitHub | [@sinmofun](https://github.com/sinmofun) |
 | Email | joe_sen@yeah.net |
 | License | MIT License |
@@ -353,4 +353,4 @@ Each instruction returns a unified result format:
 
 MIT License - see [LICENSE](./LICENSE)
 
-Copyright (c) 2026 Shi Xingyue (史兴跃)
+Copyright (c) 2026 Shi XIngyue

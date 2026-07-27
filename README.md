@@ -344,7 +344,7 @@ retr:/remote/file.txt
 
 | 项目 | 信息 |
 |------|------|
-| 作者 | Shi Xingyue (史兴跃) |
+| 作者 | Shi XIngyue |
 | GitHub | [@sinmofun](https://github.com/sinmofun) |
 | 邮箱 | joe_sen@yeah.net |
 | 许可证 | MIT License |
@@ -355,4 +355,4 @@ retr:/remote/file.txt
 
 MIT License - 详见 [LICENSE](./LICENSE)
 
-Copyright (c) 2026 Shi Xingyue (史兴跃)
+Copyright (c) 2026 Shi XIngyue
