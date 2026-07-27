@@ -14,74 +14,71 @@ It only takes a few minutes to learn how to let AI generate instructions to oper
 
 ● What is ATP?
 
-ATP (AI Transfer Protocol) is a standardized operating instruction protocol. It defines a **universal "common language" for humans, AI, and devices**, enabling any party to precisely and unambiguously operate operating systems and hardware devices through a unified syntax.
+ATP (AI Transfer Protocol) is an operating instruction protocol designed to provide a unified syntax for AI, humans, and devices. It defines a simple instruction format that allows different ends to interact with operating systems in the same way.
 
-**What problems does ATP solve?**
+**What scenarios is ATP suitable for?**
 
 ```
-Problem: AI operating your personal computer
-Legacy: AI outputs vague natural language "please create a folder named photos"
-ATP:    create#c1:./photos/  →  precise, single-step execution
+Scenario: AI operating personal computers
+Note: AI generates ATP instructions to create files and execute commands
+Example: create#c1:./photos/  →  precise directory creation
 
-Problem: Automating repetitive personal tasks
-Legacy: Write complex cron jobs or batch scripts, hard to modify
-ATP:    run#r1:./daily_backup.cmd  →  one command, reusable
+Scenario: Automating personal repetitive tasks
+Note: Write a series of operations as ATP instruction files for repeatable execution
+Example: run#r1:./daily_backup.cmd  →  one command for batch operations
 
-Problem: Rapid prototyping for developers
-Legacy: Set up project structure, write boilerplate, install dependencies manually
-ATP:    A single instruction file creates the entire scaffold in one shot
+Scenario: Developer project initialization
+Note: Use ATP instruction files to define project scaffolding
+Example: One instruction file creates the complete directory structure
 
-Problem: Cross-platform ops scripting
-Legacy: Linux uses bash, Windows uses bat, completely different syntax
-ATP:    Same instruction set, automatically adapts to Linux/Windows
+Scenario: Cross-platform operations
+Note: ATP instruction format is unified, platform automatically selects Linux PTY or Windows BAT
+Note: Command syntax must be written according to the platform
 
-Problem: IoT & device control
-Legacy: Each vendor defines its own control protocol, no interoperability
-ATP:    Standardized format, device only needs the protocol engine
+Scenario: IoT device control
+Note: After implementing the ATP engine on the device, control via unified instruction format
+Example: light#t1:ON  →  turn on light
 
-Problem: Industrial machinery control
-Legacy: Proprietary PLC protocols, expensive integration, vendor lock-in
-ATP:    Unified instruction layer over serial/ethernet, simple on/off/speed commands
+Scenario: Industrial machinery control
+Note: Use ATP instruction layer over serial/ethernet instead of proprietary PLC protocols
+Example: conveyor#c1:START speed:50
 
-Problem: AI model tool-calling fragmentation
-Legacy: Each AI platform invents its own function-calling format
-ATP:    One instruction syntax, universally compatible across all AI platforms
+Scenario: AI tool calling
+Note: Provide a unified instruction generation format for large models
+Example: terminal#t1:echo hello  →  plain text, no JSON escaping needed
 
-Problem: Remote device management
-Legacy: SSH commands differ across OS versions, error-prone
-ATP:    ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
+Scenario: Remote device management
+Note: Manage remote servers via ATP's SSH/FTP instructions
+Example: ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
 ```
 
 ---
 
 ● AI-Level Comparison
 
-ATP's plain-text design is optimized for AI generation efficiency, unlike JSON-based formats.
+ATP's plain-text design is more friendly for AI generation, fundamentally different from JSON formats.
 
 | Dimension | ATP | JSON Function Calling |
 |----------|-----|----------------------|
-| **AI Generation Speed** | Direct text output, no escaping | Requires JSON escaping (quotes, newlines, backslashes) |
-| **Escape Complexity** | Zero — plain text with hash sentries | High — nested quotes, Unicode escapes, special chars |
-| **Token Efficiency** | Short: `terminal#t1:echo hello` | Long: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` |
-| **Three-Party Verification** | Built-in id + hash boundaries | Requires external schema validation |
-| **Parse Error Recovery** | Hash sentry prevents boundary errors | Single unescaped character breaks entire JSON |
-| **Human Readability** | Directly readable and writable | Requires understanding JSON structure |
-| **Instruction Length** | ~30-50 chars (single-line) | ~80-150 chars (formatted JSON) |
-| **Multi-line Support** | Native hash sentry mode | Requires `\n` escaping or array strings |
+| **AI Generation** | Direct text output, no escaping | Requires JSON escaping (quotes, newlines, backslashes) |
+| **Escape Handling** | Not needed (plain text + hash sentry) | Needs nested quote and special character handling |
+| **Token Usage** | Lower: `terminal#t1:echo hello` (28 chars) | Higher: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` (96 chars) |
+| **Verification** | Built-in id + hash boundaries | Requires external schema validation |
+| **Parse Tolerance** | Hash sentry prevents boundary errors | Single unescaped character breaks entire JSON |
+| **Readability** | Human readable and writable | Requires understanding JSON structure |
+| **Multi-line** | Native hash sentry mode | Requires `\n` escaping or array strings |
 
-**Token Efficiency Example:**
+**Token usage comparison:**
 
 ```
-# ATP (28 chars)
+# ATP (28 characters)
 terminal#t1:echo hello
 
-# JSON Function Calling (96 chars)
+# JSON Function Calling (96 characters)
 {"tool":"terminal","id":"t1","parameters":{"command":"echo hello"}}
-
-ATP saves 70% tokens per instruction call.
 ```
 
-**Three-Party Verification:**
+**Three-party verification:**
 
 ```
 Party 1 — AI generates:     terminal#t1:echo hello
@@ -93,40 +90,29 @@ Party 3 — OS/Device:        executes and returns code:0 or error
 
 ● Where does ATP run?
 
-ATP is the **middleware protocol layer** connecting the **AI brain** with the **OS/hardware**.
+ATP sits in the middleware protocol layer between AI and OS/hardware.
 
 ```
 ┌─────────────────────────────────────────────┐
 │  AI Layer                                    │
-│  (ChatGPT, Claude, Local LLM, Agents...)     │
-│                                               │
-│  Generates ATP instructions                  │
+│  Generates ATP instruction text              │
 └──────────────────┬──────────────────────────┘
                    │ WebSocket / HTTP / Stdio
 ┌──────────────────▼──────────────────────────┐
 │  ATP Engine Layer                            │
-│                                               │
-│  ┌──────────┐  ┌──────────┐  ┌───────────┐  │
-│  │ Parser   │  │ Registry │  │ Scheduler │  │
-│  │ (Syntax) │  │ (Hotplug)│  │ (Sync/Async)│ │
-│  └──────────┘  └──────────┘  └───────────┘  │
-│                                               │
+│  Instruction parsing, registry, scheduling   │
 │  Cross-platform: Linux PTY / Windows BAT     │
 └──────────────────┬──────────────────────────┘
                    │ System Calls
 ┌──────────────────▼──────────────────────────┐
 │  OS Layer                                    │
-│                                               │
-│  Linux      Windows      macOS (planned)     │
-│  File I/O   Process      Network             │
-│  Terminal   Permission   Archive             │
+│  Linux / Windows / macOS (planned)           │
+│  File I/O, Process, Network                  │
 └──────────────────┬──────────────────────────┘
                    │
 ┌──────────────────▼──────────────────────────┐
 │  Hardware/Device Layer                       │
-│                                               │
-│  IoT Devices    Database    Remote Servers   │
-│  (Managed via SSH/FTP/WebSocket)             │
+│  IoT Devices, Database, Remote Servers       │
 └─────────────────────────────────────────────┘
 ```
 
@@ -175,7 +161,7 @@ Each output must have a unique id.
 ```
 Hash serves as sentry boundary marker, 6-16 random alphanumeric characters.
 Each hash must be unique and paired, wrapping multi-line content
-to ensure instruction integrity, preventing truncation, tampering, and boundary errors.
+to ensure instruction integrity.
 ```
 
 ---
