@@ -1,8 +1,6 @@
 # ATP - AI Transfer Protocol
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Version](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go)](https://go.dev/)
-[![Version](https://img.shields.io/badge/version-2.6.0-blue)](https://github.com/sinmofun/atp)
 
 The Universal Language for AI-OS Interaction.
 
@@ -17,17 +15,74 @@ ATP (AI Transfer Protocol) 是一套标准化的操作指令协议。它定义�
 **ATP 能快速解决什么问题？**
 
 ```
-问题: AI 大模型如何操作你的电脑？
-传统: 每个 AI 平台定义自己的工具调用格式，互不兼容
-ATP:  一套指令语法，所有 AI 平台通用
+问题: AI 操作你的个人电脑
+传统: AI 输出模糊的自然语言 "请在桌面上创建一个名为照片的文件夹"
+ATP:  create#c1:./photos/  →  精确、一步到位
 
-问题: 运维脚本如何跨平台统一？
+问题: 个人日常重复任务自动化
+传统: 写复杂的 cron 脚本或批处理文件，难以修改
+ATP:  run#r1:./daily_backup.cmd  →  一条命令，重复使用
+
+问题: 开发者快速搭建项目
+传统: 手动创建目录结构、写样板代码、安装依赖
+ATP:  一条指令文件，一次性完成整个项目脚手架
+
+问题: 运维脚本跨平台统一
 传统: Linux 写 bash，Windows 写 bat，语法完全不同
 ATP:  同一套指令，Linux/Windows 自动适配
 
-问题: IoT 设备如何接收统一指令？
-传统: 每个厂商定义自己的控制协议
-ATP:  标准化的指令格式，设备端只需实现协议引擎
+问题: IoT 设备统一控制
+传统: 每个厂商定义自己的控制协议，互不兼容
+ATP:  标准化指令格式，设备端只需实现协议引擎
+
+问题: 工业机械控制
+传统: 私有 PLC 协议，集成昂贵，厂商锁定
+ATP:  统一指令层，通过串口/以太网发送简单的开关/调速指令
+
+问题: AI 平台工具调用碎片化
+传统: 每个 AI 平台发明自己的 function calling 格式
+ATP:  一套指令语法，所有 AI 平台通用
+
+问题: 远程设备管理
+传统: SSH 命令因系统版本差异容易出错
+ATP:  ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
+```
+
+---
+
+● AI 层面的对比
+
+ATP 的纯文本设计针对 AI 生成效率进行了优化，与基于 JSON 的格式有本质区别。
+
+| 维度 | ATP | JSON Function Calling |
+|----------|-----|----------------------|
+| **AI 生成速度** | 直接文本输出，无需转义 | 需要 JSON 转义（引号、换行、反斜杠） |
+| **转义复杂度** | 零 —— 纯文本 + hash 哨兵 | 高 —— 嵌套引号、Unicode 转义、特殊字符 |
+| **Token 效率** | 短: `terminal#t1:echo hello` | 长: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` |
+| **三方校验** | 内置 id + hash 边界 | 需要外部 schema 验证 |
+| **解析错误恢复** | Hash 哨兵防止边界错误 | 一个未转义字符破坏整个 JSON |
+| **人类可读性** | 直接可读可写 | 需要理解 JSON 结构 |
+| **指令长度** | ~30-50 字符（单行） | ~80-150 字符（格式化 JSON） |
+| **多行支持** | 原生 hash 哨兵模式 | 需要 `\n` 转义或数组字符串 |
+
+**Token 效率示例:**
+
+```
+# ATP (28 字符)
+terminal#t1:echo hello
+
+# JSON Function Calling (96 字符)
+{"tool":"terminal","id":"t1","parameters":{"command":"echo hello"}}
+
+ATP 每次指令调用节省 70% 的 token 消耗。
+```
+
+**三方校验机制:**
+
+```
+第一方 — AI 生成:       terminal#t1:echo hello
+第二方 — ATP 引擎:      验证语法 + id 唯一性 + hash 边界完整性
+第三方 — OS/设备:        执行并返回 code:0 或错误信息
 ```
 
 ---
@@ -70,15 +125,6 @@ ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层
 │  (通过 SSH/FTP/WebSocket 远程管理)            │
 └─────────────────────────────────────────────┘
 ```
-
-**各层说明:**
-
-| 层级 | 作用 | ATP 提供的指令 |
-|------|------|----------------|
-| **AI 层** | 大模型生成操作指令 | 全部指令 |
-| **ATP 引擎层** | 解析、验证、执行指令 | 指令注册、解析、调度 |
-| **操作系统层** | 真实执行操作 | terminal, execute, create, read... |
-| **硬件/设备层** | 远程设备管理 | ssh, ftp, fetch |
 
 ---
 
@@ -144,16 +190,13 @@ hash 值作为哨兵内容边界标识，长度 6~16 位，由随机字母+数�
 
 ---
 
-● 示例：物联网开关灯
+● 示例：物联网与工业控制
 
 ### 控制灯泡
 
 ```
 # 开灯（所有灯）
 light#t1ss012:ON
-
-# 关灯（所有灯）
-light#t1ss012:OFF
 
 # 指定某个灯
 light#t2ss013:ON
@@ -163,28 +206,41 @@ name:living_room
 ### 控制门锁
 
 ```
-# 锁门（大门）
 door#t3ss223:LOCK
 name:gate
 
-# 锁门（车库）
-door#t4ss224:LOCK
-name:garage
+door#t5ss225:UNLOCK
+name:gate
 ```
 
-### 控制空调
+### 工业机械控制
 
 ```
-ac#t6ss301:SET_TEMP
-value:26
-name:living_room
+# 传送带控制
+conveyor#c1ss501:START
+speed:50
+
+conveyor#c2ss502:STOP
+
+# 机械臂
+robot#r1ss601:MOVE
+axis:x
+position:120
 ```
 
-### 查询传感器
+### 快速开发
 
 ```
-sensor#t8ss401:TEMPERATURE
-name:outdoor
+# 一条指令文件创建整个项目脚手架
+run#r1:./init_project.cmd
+
+# init_project.cmd 内容:
+#   create#c1:./src/
+#   create#c2:./tests/
+#   create#c3:./README.md
+#   text@t1:
+#   # My Project
+#   t1
 ```
 
 ### 执行结果

@@ -1,8 +1,6 @@
 # ATP - AI Transfer Protocol
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Version](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go)](https://go.dev/)
-[![Version](https://img.shields.io/badge/version-2.6.0-blue)](https://github.com/sinmofun/atp)
 
 The Universal Language for AI-OS Interaction.
 
@@ -17,17 +15,74 @@ ATP (AI Transfer Protocol) is a standardized operating instruction protocol. It 
 **What problems does ATP solve?**
 
 ```
-Problem: How does an AI model operate your computer?
-Legacy: Each AI platform defines its own tool-calling format, incompatible with others
-ATP:    One instruction syntax, universally compatible across all AI platforms
+Problem: AI operating your personal computer
+Legacy: AI outputs vague natural language "please create a folder named photos"
+ATP:    create#c1:./photos/  →  precise, single-step execution
 
-Problem: How to unify cross-platform operations?
+Problem: Automating repetitive personal tasks
+Legacy: Write complex cron jobs or batch scripts, hard to modify
+ATP:    run#r1:./daily_backup.cmd  →  one command, reusable
+
+Problem: Rapid prototyping for developers
+Legacy: Set up project structure, write boilerplate, install dependencies manually
+ATP:    A single instruction file creates the entire scaffold in one shot
+
+Problem: Cross-platform ops scripting
 Legacy: Linux uses bash, Windows uses bat, completely different syntax
 ATP:    Same instruction set, automatically adapts to Linux/Windows
 
-Problem: How do IoT devices receive unified commands?
-Legacy: Each vendor defines its own control protocol
-ATP:    Standardized instruction format, device only needs to implement the protocol engine
+Problem: IoT & device control
+Legacy: Each vendor defines its own control protocol, no interoperability
+ATP:    Standardized format, device only needs the protocol engine
+
+Problem: Industrial machinery control
+Legacy: Proprietary PLC protocols, expensive integration, vendor lock-in
+ATP:    Unified instruction layer over serial/ethernet, simple on/off/speed commands
+
+Problem: AI model tool-calling fragmentation
+Legacy: Each AI platform invents its own function-calling format
+ATP:    One instruction syntax, universally compatible across all AI platforms
+
+Problem: Remote device management
+Legacy: SSH commands differ across OS versions, error-prone
+ATP:    ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
+```
+
+---
+
+● AI-Level Comparison
+
+ATP's plain-text design is optimized for AI generation efficiency, unlike JSON-based formats.
+
+| Dimension | ATP | JSON Function Calling |
+|----------|-----|----------------------|
+| **AI Generation Speed** | Direct text output, no escaping | Requires JSON escaping (quotes, newlines, backslashes) |
+| **Escape Complexity** | Zero — plain text with hash sentries | High — nested quotes, Unicode escapes, special chars |
+| **Token Efficiency** | Short: `terminal#t1:echo hello` | Long: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` |
+| **Three-Party Verification** | Built-in id + hash boundaries | Requires external schema validation |
+| **Parse Error Recovery** | Hash sentry prevents boundary errors | Single unescaped character breaks entire JSON |
+| **Human Readability** | Directly readable and writable | Requires understanding JSON structure |
+| **Instruction Length** | ~30-50 chars (single-line) | ~80-150 chars (formatted JSON) |
+| **Multi-line Support** | Native hash sentry mode | Requires `\n` escaping or array strings |
+
+**Token Efficiency Example:**
+
+```
+# ATP (28 chars)
+terminal#t1:echo hello
+
+# JSON Function Calling (96 chars)
+{"tool":"terminal","id":"t1","parameters":{"command":"echo hello"}}
+
+ATP saves 70% tokens per instruction call.
+```
+
+**Three-Party Verification:**
+
+```
+Party 1 — AI generates:     terminal#t1:echo hello
+Party 2 — ATP Engine:       validates syntax + id uniqueness + hash boundaries
+Party 3 — OS/Device:        executes and returns code:0 or error
 ```
 
 ---
@@ -133,16 +188,13 @@ to ensure instruction integrity, preventing truncation, tampering, and boundary 
 
 ---
 
-● IoT Example: Smart Home
+● IoT Example: Smart Home & Industrial Control
 
 ### Light Control
 
 ```
 # Turn on all lights
 light#t1ss012:ON
-
-# Turn off all lights
-light#t1ss012:OFF
 
 # Control a specific light
 light#t2ss013:ON
@@ -152,17 +204,26 @@ name:living_room
 ### Door Lock Control
 
 ```
-# Lock the gate
 door#t3ss223:LOCK
 name:gate
 
-# Lock the garage
-door#t4ss224:LOCK
-name:garage
-
-# Unlock
 door#t5ss225:UNLOCK
 name:gate
+```
+
+### Industrial Machinery
+
+```
+# Conveyor belt control
+conveyor#c1ss501:START
+speed:50
+
+conveyor#c2ss502:STOP
+
+# Robotic arm
+robot#r1ss601:MOVE
+axis:x
+position:120
 ```
 
 ### Temperature Sensor
@@ -170,6 +231,21 @@ name:gate
 ```
 sensor#t8ss401:TEMPERATURE
 name:outdoor
+```
+
+### Rapid Development
+
+```
+# Create entire project scaffold with one instruction file
+run#r1:./init_project.cmd
+
+# Inside init_project.cmd:
+#   create#c1:./src/
+#   create#c2:./tests/
+#   create#c3:./README.md
+#   text@t1:
+#   # My Project
+#   t1
 ```
 
 ### Execution Result
