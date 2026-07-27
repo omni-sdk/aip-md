@@ -188,11 +188,14 @@ atp/
 | v2.3.0 | 2026-07-05 | 新增 Inspect/SetAllowedCommands/RemoveAll |
 | v2.0.0 | 2026-06-18 | 初始版本，核心引擎 + 30+ 内置指令 |
 
+## 作者
+
+- 作者: Shi Xingyue (史兴跃)
+- GitHub: [@joe_sen](https://github.com/joe_sen)
+- 联系方式: joe_sen@yeah.net
+
 ## 许可证
 
 MIT License - 详见 [LICENSE](./LICENSE)
 
-## 联系方式
-
-- GitHub: [github.com/sinmofun/atp](https://github.com/sinmofun/atp)
-- 作者: Joe_sen
+Copyright (c) 2026 Shi Xingyue (史兴跃)
