@@ -18,6 +18,10 @@ ATP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平�
 
 ▶ 场景速览: [文件操作](./scenes/scene-file-crud.md) · [物联网控制](./scenes/scene-iot-control.md) · [系统指令](./scenes/scene-system-command.md) · [远程管理](./scenes/scene-remote-management.md) · [AI 工具调用](./scenes/scene-ai-tool-calling.md) · [代码运行](./scenes/scene-code-run.md) · [数据库](./scenes/scene-database.md) · [Docker](./scenes/scene-docker.md) · [Git](./scenes/scene-git.md) · [网络诊断](./scenes/scene-network.md) · [定时备份](./scenes/scene-cron-backup.md) · [系统监控](./scenes/scene-monitor.md) · [智能家居](./scenes/scene-smart-home.md) · [DevOps](./scenes/scene-devops.md) · [错误处理](./scenes/scene-error-handling.md) · [教学](./scenes/scene-teaching.md) · [更多...](./scenes/)
 
+▶ 角色示例: [系统管理员](./roles/role-system-admin.md) · [DevOps](./roles/role-devops.md) · [数据科学家](./roles/role-data-scientist.md) · [家庭自动化](./roles/role-home-automation.md) · [物联网开发](./roles/role-iot-developer.md) · [后端开发](./roles/role-backend-dev.md) · [前端开发](./roles/role-frontend-dev.md) · [安全工程师](./roles/role-security-engineer.md) · [更多...](./roles/)
+
+▶ 常见问题: [ATP 是什么？](./questions/question-what-is-atp.md) · [为什么不用 JSON？](./questions/question-why-not-json.md) · [如何开始使用？](./questions/question-how-to-use.md) · [如何跨平台？](./questions/question-cross-platform.md) · [如何保证安全？](./questions/question-security.md) · [与其他方案对比](./questions/question-vs-other.md) · [如何扩展？](./questions/question-extend.md) · [实际用途？](./questions/question-practical.md) · [更多...](./questions/)
+
 ---
 
 ● 什么是 ATP？
