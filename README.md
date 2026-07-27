@@ -16,7 +16,7 @@ ATP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平�
 
 经过 2131 个测试用例验证，详见 [TEST_REPORT.md](./TEST_REPORT.md)。
 
-更多场景示例: [scenes/](./scenes/)
+▶ 场景速览: [文件操作](./scenes/scene-file-crud.md) · [物联网控制](./scenes/scene-iot-control.md) · [系统指令](./scenes/scene-system-command.md) · [远程管理](./scenes/scene-remote-management.md) · [AI 工具调用](./scenes/scene-ai-tool-calling.md) · [代码运行](./scenes/scene-code-run.md) · [数据库](./scenes/scene-database.md) · [Docker](./scenes/scene-docker.md) · [Git](./scenes/scene-git.md) · [网络诊断](./scenes/scene-network.md) · [定时备份](./scenes/scene-cron-backup.md) · [系统监控](./scenes/scene-monitor.md) · [智能家居](./scenes/scene-smart-home.md) · [DevOps](./scenes/scene-devops.md) · [错误处理](./scenes/scene-error-handling.md) · [教学](./scenes/scene-teaching.md) · [更多...](./scenes/)
 
 ---
 
@@ -172,12 +172,6 @@ hash 值作为哨兵内容边界标识，长度 6~16 位，由随机字母+数�
 且完整包裹多行参数或文本，确保指令完整性。
 每组的 hash 必须保持唯一性且成对出现。
 ```
-
----
-
-● 场景示例
-
-更多带指令和返回结果的完整示例，请查看 [scenes/](./scenes/) 目录。
 
 ---
 
