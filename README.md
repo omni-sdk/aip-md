@@ -4,204 +4,206 @@
 
 The Universal Language for AI-OS Interaction.
 
-[中文文档](./README_CN.md)
+[English Document](./README.md)
 
 ---
 
-● What is ATP?
+● 什么是 ATP？
 
-ATP (AI Transfer Protocol) is a standardized operating instruction protocol. It defines a **universal "common language" for humans, AI, and devices**, enabling any party to precisely and unambiguously operate operating systems and hardware devices through a unified syntax.
+ATP (AI Transfer Protocol) 是一套标准化的操作指令协议。它定义了一套**人、AI、设备三者通用的"普通话"**，让任何一端都能通过统一的语法规则，精确、无歧义地操作操作系统和硬件设备。
 
-**What problems does ATP solve?**
+**ATP 能快速解决什么问题？**
 
 ```
-Problem: AI operating your personal computer
-Legacy: AI outputs vague natural language "please create a folder named photos"
-ATP:    create#c1:./photos/  →  precise, single-step execution
+问题: AI 操作你的个人电脑
+传统: AI 输出模糊的自然语言 "请在桌面上创建一个名为照片的文件夹"
+ATP:  create#c1:./photos/  →  精确、一步到位
 
-Problem: Automating repetitive personal tasks
-Legacy: Write complex cron jobs or batch scripts, hard to modify
-ATP:    run#r1:./daily_backup.cmd  →  one command, reusable
+问题: 个人日常重复任务自动化
+传统: 写复杂的 cron 脚本或批处理文件，难以修改
+ATP:  run#r1:./daily_backup.cmd  →  一条命令，重复使用
 
-Problem: Rapid prototyping for developers
-Legacy: Set up project structure, write boilerplate, install dependencies manually
-ATP:    A single instruction file creates the entire scaffold in one shot
+问题: 开发者快速搭建项目
+传统: 手动创建目录结构、写样板代码、安装依赖
+ATP:  一条指令文件，一次性完成整个项目脚手架
 
-Problem: Cross-platform ops scripting
-Legacy: Linux uses bash, Windows uses bat, completely different syntax
-ATP:    Same instruction set, automatically adapts to Linux/Windows
+问题: 运维脚本跨平台统一
+传统: Linux 写 bash，Windows 写 bat，语法完全不同
+ATP:  同一套指令，Linux/Windows 自动适配
 
-Problem: IoT & device control
-Legacy: Each vendor defines its own control protocol, no interoperability
-ATP:    Standardized format, device only needs the protocol engine
+问题: IoT 设备统一控制
+传统: 每个厂商定义自己的控制协议，互不兼容
+ATP:  标准化指令格式，设备端只需实现协议引擎
 
-Problem: Industrial machinery control
-Legacy: Proprietary PLC protocols, expensive integration, vendor lock-in
-ATP:    Unified instruction layer over serial/ethernet, simple on/off/speed commands
+问题: 工业机械控制
+传统: 私有 PLC 协议，集成昂贵，厂商锁定
+ATP:  统一指令层，通过串口/以太网发送简单的开关/调速指令
 
-Problem: AI model tool-calling fragmentation
-Legacy: Each AI platform invents its own function-calling format
-ATP:    One instruction syntax, universally compatible across all AI platforms
+问题: AI 平台工具调用碎片化
+传统: 每个 AI 平台发明自己的 function calling 格式
+ATP:  一套指令语法，所有 AI 平台通用
 
-Problem: Remote device management
-Legacy: SSH commands differ across OS versions, error-prone
-ATP:    ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
+问题: 远程设备管理
+传统: SSH 命令因系统版本差异容易出错
+ATP:  ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
 ```
 
 ---
 
-● AI-Level Comparison
+● AI 层面的对比
 
-ATP's plain-text design is optimized for AI generation efficiency, unlike JSON-based formats.
+ATP 的纯文本设计针对 AI 生成效率进行了优化，与基于 JSON 的格式有本质区别。
 
-| Dimension | ATP | JSON Function Calling |
+| 维度 | ATP | JSON Function Calling |
 |----------|-----|----------------------|
-| **AI Generation Speed** | Direct text output, no escaping | Requires JSON escaping (quotes, newlines, backslashes) |
-| **Escape Complexity** | Zero — plain text with hash sentries | High — nested quotes, Unicode escapes, special chars |
-| **Token Efficiency** | Short: `terminal#t1:echo hello` | Long: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` |
-| **Three-Party Verification** | Built-in id + hash boundaries | Requires external schema validation |
-| **Parse Error Recovery** | Hash sentry prevents boundary errors | Single unescaped character breaks entire JSON |
-| **Human Readability** | Directly readable and writable | Requires understanding JSON structure |
-| **Instruction Length** | ~30-50 chars (single-line) | ~80-150 chars (formatted JSON) |
-| **Multi-line Support** | Native hash sentry mode | Requires `\n` escaping or array strings |
+| **AI 生成速度** | 直接文本输出，无需转义 | 需要 JSON 转义（引号、换行、反斜杠） |
+| **转义复杂度** | 零 —— 纯文本 + hash 哨兵 | 高 —— 嵌套引号、Unicode 转义、特殊字符 |
+| **Token 效率** | 短: `terminal#t1:echo hello` | 长: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` |
+| **三方校验** | 内置 id + hash 边界 | 需要外部 schema 验证 |
+| **解析错误恢复** | Hash 哨兵防止边界错误 | 一个未转义字符破坏整个 JSON |
+| **人类可读性** | 直接可读可写 | 需要理解 JSON 结构 |
+| **指令长度** | ~30-50 字符（单行） | ~80-150 字符（格式化 JSON） |
+| **多行支持** | 原生 hash 哨兵模式 | 需要 `\n` 转义或数组字符串 |
 
-**Token Efficiency Example:**
+**Token 效率示例:**
 
 ```
-# ATP (28 chars)
+# ATP (28 字符)
 terminal#t1:echo hello
 
-# JSON Function Calling (96 chars)
+# JSON Function Calling (96 字符)
 {"tool":"terminal","id":"t1","parameters":{"command":"echo hello"}}
 
-ATP saves 70% tokens per instruction call.
+ATP 每次指令调用节省 70% 的 token 消耗。
 ```
 
-**Three-Party Verification:**
+**三方校验机制:**
 
 ```
-Party 1 — AI generates:     terminal#t1:echo hello
-Party 2 — ATP Engine:       validates syntax + id uniqueness + hash boundaries
-Party 3 — OS/Device:        executes and returns code:0 or error
+第一方 — AI 生成:       terminal#t1:echo hello
+第二方 — ATP 引擎:      验证语法 + id 唯一性 + hash 边界完整性
+第三方 — OS/设备:        执行并返回 code:0 或错误信息
 ```
 
 ---
 
-● Where does ATP run?
+● ATP 运行在哪个环节？
 
-ATP is the **middleware protocol layer** connecting the **AI brain** with the **OS/hardware**.
+ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层。
 
 ```
 ┌─────────────────────────────────────────────┐
-│  AI Layer                                    │
-│  (ChatGPT, Claude, Local LLM, Agents...)     │
+│  AI 层                                       │
+│  (ChatGPT, Claude, 本地大模型, Agent...)     │
 │                                               │
-│  Generates ATP instructions                  │
+│  生成 ATP 指令文本  →  terminal#t1:echo hello │
 └──────────────────┬──────────────────────────┘
-                   │ WebSocket / HTTP / Stdio
+                   │ WebSocket / HTTP / 标准输入
 ┌──────────────────▼──────────────────────────┐
-│  ATP Engine Layer                            │
+│  ATP 引擎层                                   │
 │                                               │
-│  ┌──────────┐  ┌──────────┐  ┌───────────┐  │
-│  │ Parser   │  │ Registry │  │ Scheduler │  │
-│  │ (Syntax) │  │ (Hotplug)│  │ (Sync/Async)│ │
-│  └──────────┘  └──────────┘  └───────────┘  │
+│  ┌─────────┐  ┌──────────┐  ┌─────────────┐ │
+│  │ 指令解析 │  │ 指令注册 │  │ 执行调度    │ │
+│  │ (语法树) │  │ (热插拔) │  │ (同步/异步) │ │
+│  └─────────┘  └──────────┘  └─────────────┘ │
 │                                               │
-│  Cross-platform: Linux PTY / Windows BAT     │
+│  跨平台适配: Linux PTY / Windows BAT / ...   │
 └──────────────────┬──────────────────────────┘
-                   │ System Calls
+                   │ 系统调用
 ┌──────────────────▼──────────────────────────┐
-│  OS Layer                                    │
+│  操作系统层                                   │
 │                                               │
-│  Linux      Windows      macOS (planned)     │
-│  File I/O   Process      Network             │
-│  Terminal   Permission   Archive             │
+│  Linux      Windows      macOS (计划中)       │
+│  文件系统   进程管理     网络请求              │
+│  终端命令   权限控制     压缩解压              │
 └──────────────────┬──────────────────────────┘
                    │
 ┌──────────────────▼──────────────────────────┐
-│  Hardware/Device Layer                       │
+│  硬件/设备层                                  │
 │                                               │
-│  IoT Devices    Database    Remote Servers   │
-│  (Managed via SSH/FTP/WebSocket)             │
+│  IoT 设备    数据库      远程服务器            │
+│  (通过 SSH/FTP/WebSocket 远程管理)            │
 └─────────────────────────────────────────────┘
 ```
 
 ---
 
-● Comparison with existing solutions
+● 与市面上各种方案的对比
 
-### Instruction Format Comparison
+### 指令格式对比
 
-| Solution | Syntax | Cross-Platform | Multi-line | Tx Tracking | Permission Isolation |
+| 方案 | 语法示例 | 跨平台 | 多行支持 | 事务追踪 | 权限隔离 |
 |------|---------|:------:|:--------:|:--------:|:--------:|
-| **ATP** | `terminal#t1:echo hello` | ✅ | ✅ Sentry | ✅ id | ✅ workspace + whitelist |
+| **ATP** | `terminal#t1:echo hello` | ✅ | ✅ 哨兵模式 | ✅ id 追踪 | ✅ workspace + 白名单 |
 | Function Calling | `{"name":"run_cmd",...}` | ❌ | ❌ JSON | ❌ | ❌ |
-| Shell Scripts | `#!/bin/bash` | ❌ | ✅ | ❌ | ❌ |
+| Shell 脚本 | `#!/bin/bash` | ❌ | ✅ | ❌ | ❌ |
 | Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ |
 | MCP | JSON-RPC | ❌ | ❌ | ✅ | ❌ |
 
-### Test Data Comparison
+### 测试数据对比
 
-| Dimension | ATP (Linux) | ATP (Windows) | Shell Scripts |
+| 测试维度 | ATP (Linux) | ATP (Windows) | 传统脚本 |
 |----------|:-----------:|:-------------:|:--------:|
-| Basic Commands | 100% | 100% | 100% |
-| Pipes/Redirects | 100% | 83% | 100% |
-| Timeout Control | 100% | 100% | Manual |
-| Async Execution | 100% | 100% | Complex |
-| Transaction Tracking | Built-in id | Built-in id | None |
-| Permission Isolation | workspace | workspace | Unrestricted |
-| Command Whitelist | Supported | Supported | None |
+| 基础命令 | 100% | 100% | 100% |
+| 管道/重定向 | 100% | 83% | 100% |
+| 超时控制 | 100% | 100% | 手动实现 |
+| 异步执行 | 100% | 100% | 复杂 |
+| 事务追踪 | 内置 id | 内置 id | 无 |
+| 权限隔离 | workspace | workspace | 无限制 |
+| 指令白名单 | 支持 | 支持 | 无 |
 
 ---
 
-● Core: Instruction Syntax Rules
+● ATP 的核心：指令语法规则
 
-### Instruction Format
+### 指令规则
 
 ```
-namespace.command#id:main_param         ← Recommended (namespace.command)
-command#id:main_param                   ← Compatible (no namespace)
-command#id@hash:                        ← Multi-line main param (sentry start)
-multi-line content
-hash                                    ← Sentry end
-key:value                               ← Single-line param
-key@hash2:
-multi-line content
+namespace.command#id:主参数          ← 推荐格式（命名空间.指令名）
+command#id:主参数                    ← 兼容格式（无命名空间）
+command#id@hash:                    ← 主参数多行（哨兵块开始）
+多行主参数内容
+hash                                 ← 哨兵块结束
+单行参数:参数值
+多行参数@hash2:
+任意多行内容
 hash2
 ```
 
-### ID Rules
+### id 规则
 
 ```
-Unique transaction identifier, 4-16 characters, alphanumeric.
-Used for traceability, ordering, retry, and multi-instruction isolation.
-Each output must have a unique id.
+事务唯一编号，长度 4~16 位，由字母、数字组合而成。
+用于事务溯源、任务排序、断点重试、多指令隔离。
+每次输出的 id 必须保持唯一性。
 ```
 
-### Hash Rules
+### hash 规则
 
 ```
-Hash serves as sentry boundary marker, 6-16 random alphanumeric characters.
-Each hash must be unique and paired, wrapping multi-line content
-to ensure instruction integrity, preventing truncation, tampering, and boundary errors.
+hash 值作为哨兵内容边界标识，长度 6~16 位，由随机字母+数字组合。
+每组 hash 值与其他范围 hash 保持完全不重复，
+且完整包裹多行参数或文本，确保指令完整性，
+防止截断、篡改、边界错乱。
+每组的 hash 必须保持唯一性且成对出现。
 ```
 
 ---
 
-● IoT Example: Smart Home & Industrial Control
+● 示例：物联网与工业控制
 
-### Light Control
+### 控制灯泡
 
 ```
-# Turn on all lights
+# 开灯（所有灯）
 light#t1ss012:ON
 
-# Control a specific light
+# 指定某个灯
 light#t2ss013:ON
 name:living_room
 ```
 
-### Door Lock Control
+### 控制门锁
 
 ```
 door#t3ss223:LOCK
@@ -211,35 +213,28 @@ door#t5ss225:UNLOCK
 name:gate
 ```
 
-### Industrial Machinery
+### 工业机械控制
 
 ```
-# Conveyor belt control
+# 传送带控制
 conveyor#c1ss501:START
 speed:50
 
 conveyor#c2ss502:STOP
 
-# Robotic arm
+# 机械臂
 robot#r1ss601:MOVE
 axis:x
 position:120
 ```
 
-### Temperature Sensor
+### 快速开发
 
 ```
-sensor#t8ss401:TEMPERATURE
-name:outdoor
-```
-
-### Rapid Development
-
-```
-# Create entire project scaffold with one instruction file
+# 一条指令文件创建整个项目脚手架
 run#r1:./init_project.cmd
 
-# Inside init_project.cmd:
+# init_project.cmd 内容:
 #   create#c1:./src/
 #   create#c2:./tests/
 #   create#c3:./README.md
@@ -248,9 +243,9 @@ run#r1:./init_project.cmd
 #   t1
 ```
 
-### Execution Result
+### 执行结果
 
-Each instruction returns a unified result format:
+每条指令执行后都会返回统一的结果格式：
 
 ```json
 {
@@ -263,19 +258,19 @@ Each instruction returns a unified result format:
 
 ---
 
-● Author
+● 作者
 
-| Item | Info |
+| 项目 | 信息 |
 |------|------|
-| Author | Shi Xingyue (史兴跃) |
+| 作者 | Shi Xingyue (史兴跃) |
 | GitHub | [@sinmofun](https://github.com/sinmofun) |
-| Email | joe_sen@yeah.net |
-| License | MIT License |
+| 邮箱 | joe_sen@yeah.net |
+| 许可证 | MIT License |
 
 ---
 
-● License
+● 许可证
 
-MIT License - see [LICENSE](./LICENSE)
+MIT License - 详见 [LICENSE](./LICENSE)
 
 Copyright (c) 2026 Shi Xingyue (史兴跃)
