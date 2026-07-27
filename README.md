@@ -16,6 +16,8 @@ ATP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平�
 
 经过 2131 个测试用例验证，详见 [TEST_REPORT.md](./TEST_REPORT.md)。
 
+更多场景示例: [scenes/](./scenes/)
+
 ---
 
 ● 什么是 ATP？
@@ -173,138 +175,9 @@ hash 值作为哨兵内容边界标识，长度 6~16 位，由随机字母+数�
 
 ---
 
-● 示例
+● 场景示例
 
-### 物联网设备控制
-
-```
-# 控制灯泡
-light#t1ss012:ON
-light#t2ss013:OFF
-name:living_room
-
-# 控制门锁
-door#t3ss223:LOCK
-name:gate
-door#t5ss225:UNLOCK
-name:gate
-
-# 工业机械控制
-conveyor#c1ss501:START
-speed:50
-conveyor#c2ss502:STOP
-
-robot#r1ss601:MOVE
-axis:x
-position:120
-
-# 查询传感器
-sensor#t8ss401:TEMPERATURE
-name:outdoor
-```
-
-### 文件 CRUD
-
-```
-# 创建文件或目录
-create#c1:./project/
-create#c2:./project/README.md
-text@t2:
-# My Project
-This is a new project created by ATP.
-t2
-
-# 读取文件
-read#r1:./project/README.md
-encoding:utf8
-
-# 列出目录内容
-list#l1:./project/
-
-# 修改文件（完整替换）
-update#u1:./project/README.md
-text@t3:
-# My Project - Updated
-Updated by ATP.
-t3
-
-# 追加内容到文件末尾
-append#a1:./project/README.md
-text@t4:
-Appended line by ATP.
-t4
-
-# 删除文件
-delete#d1:./project/README.md
-
-# 删除目录
-delete#d2:./project/
-```
-
-### 系统指令执行
-
-```
-# 查看系统信息
-terminal#t1:uname -a
-terminal#t2:echo %OS%   (Windows)
-terminal#t3:df -h        (Linux 磁盘使用)
-
-# 进程管理
-terminal#t4:ps aux | grep nginx
-terminal#t5:tasklist | findstr /c:"atp_ws"   (Windows)
-
-# 网络诊断
-terminal#t6:ping -c 4 8.8.8.8     (Linux)
-terminal#t7:ping -n 4 8.8.8.8     (Windows)
-
-# 定时任务
-terminal#t8:echo "0 3 * * * /usr/bin/backup.sh" | crontab -
-
-# 文件压缩
-zip#z1:./project
-to:./project_backup.zip
-format:zip
-level:6
-
-# 文件解压
-unzip#uz1:./project_backup.zip
-to:./restored/
-```
-
-### 远程设备管理
-
-```
-# SSH 登录远程服务器
-ssh#s1:
-host:192.168.0.100
-user:admin
-pass:password123
-
-# 在远程服务器执行命令
-ssh#s1:session_id
-cmd:systemctl restart nginx
-
-# FTP 文件传输
-ftp#f1:
-host:10.0.0.50
-user:ftpuser
-pass:ftppass123
-ftp#f1:session_id
-retr:/remote/file.txt
-```
-
-### 执行结果
-
-每条指令执行后都会返回统一的结果格式：
-
-```json
-{
-  "id": "t1ss012",
-  "code": 0,
-  "text": "success",
-  "data": "light turned on"
-}
-```
+更多带指令和返回结果的完整示例，请查看 [scenes/](./scenes/) 目录。
 
 ---
 
