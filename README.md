@@ -8,7 +8,7 @@ The Universal Language for AI-OS Interaction.
 
 ---
 
-## 一、什么是 ATP？
+● 什么是 ATP？
 
 ATP (AI Transfer Protocol) 是一套标准化的操作指令协议。它定义了一套**人、AI、设备三者通用的"普通话"**，让任何一端都能通过统一的语法规则，精确、无歧义地操作操作系统和硬件设备。
 
@@ -30,7 +30,7 @@ ATP:  标准化的指令格式，设备端只需实现协议引擎
 
 ---
 
-## 二、ATP 运行在哪个环节？
+● ATP 运行在哪个环节？
 
 ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层。
 
@@ -80,9 +80,9 @@ ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层
 
 ---
 
-## 三、与市面上各种方案的对比
+● 与市面上各种方案的对比
 
-### 3.1 指令格式对比
+### 指令格式对比
 
 | 方案 | 语法示例 | 跨平台 | 多行支持 | 事务追踪 | 权限隔离 | 安全隔离 |
 |------|---------|:------:|:--------:|:--------:|:--------:|:--------:|
@@ -97,7 +97,7 @@ ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层
 - **白名单机制**: 通过 `SetAllowedCommands` 可以精确控制 AI 只能执行哪些指令，例如只允许文件读取，禁止执行系统命令
 - **执行隔离**: `execute` 和 `terminal` 指令的工作目录基于 `workspace` 配置，无法随意切换目录
 
-### 3.2 测试数据对比
+### 测试数据对比
 
 | 测试维度 | ATP (Linux) | ATP (Windows) | 传统脚本 | Function Calling |
 |----------|:-----------:|:-------------:|:--------:|:----------------:|
@@ -112,7 +112,7 @@ ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层
 | 权限隔离 | workspace | workspace | 无限制 | 无限制 |
 | 指令白名单 | 支持 | 支持 | 无 | 无 |
 
-### 3.3 ATP 的核心优势
+### ATP 的核心优势
 
 1. **真正的跨平台**: 同一指令在 Linux 和 Windows 下行为一致，自动适配底层实现
 2. **事务级追踪**: 每条指令都有唯一 id，支持断点重试、结果关联
@@ -123,7 +123,7 @@ ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层
 
 ---
 
-## 四、ATP 的核心：指令语法规则
+● ATP 的核心：指令语法规则
 
 ATP 的精髓在于定义了**一套精确、无歧义的指令描述语言**。
 
@@ -177,109 +177,83 @@ ATP 方式:
 
 ---
 
-## 五、示例：物联网开关灯
+● 示例：物联网开关灯
 
-假设你有一个智能灯泡，通过 ATP 引擎连接到网络。
+ATP 的指令设计允许你自定义命名空间，创建属于特定设备的专属指令。以下是一些示例：
 
-### 场景：用一条指令开灯
-
-```
-terminal#light1:echo ON > /dev/smart_light
-```
-
-### 场景：用指令组合实现定时关灯
+### 控制灯泡
 
 ```
-when#w1:create#c1:./light_timer.txt
-text@t1:
-OFF
-t1
-if:[c1.code]==0
-then@then1:
-terminal#t2:echo OFF > /dev/smart_light
-then1
+# 开灯（所有灯）
+light#t1ss012:ON
+
+# 关灯（所有灯）
+light#t1ss012:OFF
+
+# 指定某个灯
+light#t2ss013:ON
+name:living_room
+
+light#t2ss013:OFF
+name:living_room
 ```
 
-### 场景：AI 自动判断并控制
+### 控制门锁
 
 ```
-AI 收到用户请求: "帮我打开客厅的灯"
-AI 生成 ATP 指令:
-  terminal#ai_living_room:echo ON > /dev/living_room_light
+# 锁门（大门）
+door#t3ss223:LOCK
+name:gate
 
-ATP 引擎执行 → 灯亮
-AI 收到结果: code:0, text:"success"
-AI 回复用户: "客厅灯已打开"
+# 锁门（车库）
+door#t4ss224:LOCK
+name:garage
+
+# 解锁
+door#t5ss225:UNLOCK
+name:gate
 ```
 
-### 同样的指令，操作不同的设备
+### 控制空调
 
 ```
-# 控制灯泡
-terminal#t1:echo ON > /dev/light
+# 设置温度
+ac#t6ss301:SET_TEMP
+value:26
+name:living_room
 
-# 控制空调
-terminal#t2:echo 26 > /dev/ac/temperature
+# 关闭空调
+ac#t7ss302:OFF
+name:living_room
+```
 
-# 控制门锁
-terminal#t3:echo LOCK > /dev/door
+### 查询传感器
 
-# 查询温度传感器
+```
+# 读取温度传感器
 read#r1:/dev/temperature_sensor
+
+# 也可以通过自定义指令
+sensor#t8ss401:TEMPERATURE
+name:outdoor
+```
+
+### 执行结果
+
+每条指令执行后都会返回统一的结果格式：
+
+```json
+{
+  "id": "t1ss012",
+  "code": 0,
+  "text": "success",
+  "data": "light turned on"
+}
 ```
 
 ---
 
-## 六、快速开始
-
-### 环境要求
-
-- Go 1.26+ (推荐)
-- 支持的 OS: Linux, Windows, macOS (计划中)
-
-### 克隆项目
-
-```bash
-git clone https://github.com/sinmofun/atp.git
-cd atp
-```
-
-### 编译
-
-```bash
-go build -o atp_ws ./server/atp_ws.go
-```
-
-### 运行
-
-```bash
-./atp_ws
-```
-
-服务默认监听在 `ws://127.0.0.1:9000/ws`
-
-### 基础使用
-
-```
-# 文件操作
-create#c1:./hello.txt
-text@t1:
-Hello, World!
-t1
-
-# 读取文件
-read#r1:./hello.txt
-
-# 执行系统命令
-terminal#t1:echo Hello from ATP
-
-# 网络请求
-fetch#f1:https://api.github.com/repos/sinmofun/atp
-```
-
----
-
-## 七、作者
+● 作者
 
 | 项目 | 信息 |
 |------|------|
@@ -290,7 +264,7 @@ fetch#f1:https://api.github.com/repos/sinmofun/atp
 
 ---
 
-## 八、许可证
+● 许可证
 
 MIT License - 详见 [LICENSE](./LICENSE)
 
