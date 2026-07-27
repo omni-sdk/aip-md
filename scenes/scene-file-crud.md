@@ -18,7 +18,7 @@ create#c1:./project/
 create#c2:./project/README.md
 text@t2:
 # My Project
-This is a new project created by ATP.
+This is a new project created by AITP.
 t2
 ```
 
@@ -36,7 +36,7 @@ encoding:utf8
 ```
 
 ```json
-{"id":"r1","code":0,"text":"success","data":"# My Project\nThis is a new project created by ATP."}
+{"id":"r1","code":0,"text":"success","data":"# My Project\nThis is a new project created by AITP."}
 ```
 
 ---
@@ -58,7 +58,7 @@ list#l1:./project/
 ```atp
 append#a1:./project/README.md
 text@t4:
-Appended line by ATP.
+Appended line by AITP.
 t4
 ```
 

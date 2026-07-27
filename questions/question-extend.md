@@ -1,12 +1,12 @@
-# 如何扩展 ATP？
+# 如何扩展 AITP？
 
 ## 问题
 
-我想为 ATP 添加自定义指令，该怎么做？
+我想为 AITP 添加自定义指令，该怎么做？
 
 ## 解答
 
-ATP 的指令系统支持热插拔，新增指令只需实现 Command 接口并注册即可：
+AITP 的指令系统支持热插拔，新增指令只需实现 Command 接口并注册即可：
 
 ```go
 type LightCommand struct{}
