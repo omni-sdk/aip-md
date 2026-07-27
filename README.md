@@ -12,6 +12,10 @@ The Universal Language for AI-OS Interaction.
 
 ATP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平台自动化操作、IoT 设备指令控制、远程服务器管理、教学场景等。
 
+直接使用提示词: 将 [PROMPT.md](./PROMPT.md) 的内容复制到大模型的系统提示中，AI 即可学会生成 ATP 指令。
+
+经过 2131 个测试用例验证，详见 [TEST_REPORT.md](./TEST_REPORT.md)。
+
 ---
 
 ● 什么是 ATP？

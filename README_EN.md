@@ -12,6 +12,10 @@ It only takes a few minutes to learn how to let AI generate instructions to oper
 
 ATP is designed for AI Agent development, LLM tool calling, AI workflow orchestration, cross-platform automation, IoT device command control, remote server management, teaching scenarios, and more.
 
+Prompt Guide: Copy the content of [PROMPT.md](./PROMPT.md) into your LLM's system prompt, and the AI will learn to generate ATP instructions.
+
+Verified by 2131 test cases, see [TEST_REPORT.md](./TEST_REPORT.md).
+
 ---
 
 ● What is ATP?
