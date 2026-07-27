@@ -8,6 +8,10 @@ The Universal Language for AI-OS Interaction.
 
 ---
 
+It only takes a few minutes to learn how to let AI generate instructions to operate systems and control devices.
+
+---
+
 ● What is ATP?
 
 ATP (AI Transfer Protocol) is a standardized operating instruction protocol. It defines a **universal "common language" for humans, AI, and devices**, enabling any party to precisely and unambiguously operate operating systems and hardware devices through a unified syntax.
@@ -130,27 +134,15 @@ ATP is the **middleware protocol layer** connecting the **AI brain** with the **
 
 ● Comparison with existing solutions
 
-### Instruction Format Comparison
-
-| Solution | Syntax | Cross-Platform | Multi-line | Tx Tracking | Permission Isolation |
-|------|---------|:------:|:--------:|:--------:|:--------:|
-| **ATP** | `terminal#t1:echo hello` | ✅ | ✅ Sentry | ✅ id | ✅ workspace + whitelist |
-| Function Calling | `{"name":"run_cmd",...}` | ❌ | ❌ JSON | ❌ | ❌ |
-| Shell Scripts | `#!/bin/bash` | ❌ | ✅ | ❌ | ❌ |
-| Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ |
-| MCP | JSON-RPC | ❌ | ❌ | ✅ | ❌ |
-
-### Test Data Comparison
-
-| Dimension | ATP (Linux) | ATP (Windows) | Shell Scripts |
-|----------|:-----------:|:-------------:|:--------:|
-| Basic Commands | 100% | 100% | 100% |
-| Pipes/Redirects | 100% | 83% | 100% |
-| Timeout Control | 100% | 100% | Manual |
-| Async Execution | 100% | 100% | Complex |
-| Transaction Tracking | Built-in id | Built-in id | None |
-| Permission Isolation | workspace | workspace | Unrestricted |
-| Command Whitelist | Supported | Supported | None |
+| Solution | Syntax | Cross-Platform | Multi-line | Tx Tracking | Permission Isolation | AI Friendly | Extensible |
+|------|------|:------:|:----:|:--------:|:--------:|:-------:|:------:|
+| **ATP** | `terminal#t1:echo hello` | ✅ | ✅ Sentry | ✅ id | ✅ workspace | ✅ Plain Text | ✅ Hotplug |
+| Function Calling | Nested JSON | ❌ | ❌ | ❌ | ❌ | ❌ JSON Escape | ❌ |
+| Shell Scripts | bash/bat syntax | ❌ | ✅ | ❌ | ❌ | ❌ Complex | ❌ |
+| Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ | ❌ YAML Verbose | ✅ |
+| MCP | JSON-RPC | ❌ | ❌ | ✅ | ❌ | ❌ JSON Escape | ✅ |
+| REST API | HTTP + JSON | ❌ | ❌ | ❌ | ❌ | ❌ Custom | ❌ |
+| gRPC | Protobuf | ❌ | ❌ | ❌ | ❌ | ❌ Compile | ❌ |
 
 ---
 
@@ -284,21 +276,6 @@ level:6
 # File extraction
 unzip#uz1:./project_backup.zip
 to:./restored/
-```
-
-### Rapid Development
-
-```
-# Create entire project scaffold with one instruction file
-run#r1:./init_project.cmd
-
-# Inside init_project.cmd:
-#   create#c1:./src/
-#   create#c2:./tests/
-#   create#c3:./README.md
-#   text@t1:
-#   # My Project
-#   t1
 ```
 
 ### Remote Device Management

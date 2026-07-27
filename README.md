@@ -8,6 +8,10 @@ The Universal Language for AI-OS Interaction.
 
 ---
 
+你只需要几分钟就学会让 AI 生成指令来操作系统、控制设备。
+
+---
+
 ● 什么是 ATP？
 
 ATP (AI Transfer Protocol) 是一套标准化的操作指令协议。它定义了一套**人、AI、设备三者通用的"普通话"**，让任何一端都能通过统一的语法规则，精确、无歧义地操作操作系统和硬件设备。
@@ -130,27 +134,15 @@ ATP 是连接 **AI 大脑** 与 **操作系统/硬件** 之间的中间协议层
 
 ● 与市面上各种方案的对比
 
-### 指令格式对比
-
-| 方案 | 语法示例 | 跨平台 | 多行支持 | 事务追踪 | 权限隔离 |
-|------|---------|:------:|:--------:|:--------:|:--------:|
-| **ATP** | `terminal#t1:echo hello` | ✅ | ✅ 哨兵模式 | ✅ id 追踪 | ✅ workspace + 白名单 |
-| Function Calling | `{"name":"run_cmd",...}` | ❌ | ❌ JSON | ❌ | ❌ |
-| Shell 脚本 | `#!/bin/bash` | ❌ | ✅ | ❌ | ❌ |
-| Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ |
-| MCP | JSON-RPC | ❌ | ❌ | ✅ | ❌ |
-
-### 测试数据对比
-
-| 测试维度 | ATP (Linux) | ATP (Windows) | 传统脚本 |
-|----------|:-----------:|:-------------:|:--------:|
-| 基础命令 | 100% | 100% | 100% |
-| 管道/重定向 | 100% | 83% | 100% |
-| 超时控制 | 100% | 100% | 手动实现 |
-| 异步执行 | 100% | 100% | 复杂 |
-| 事务追踪 | 内置 id | 内置 id | 无 |
-| 权限隔离 | workspace | workspace | 无限制 |
-| 指令白名单 | 支持 | 支持 | 无 |
+| 方案 | 语法 | 跨平台 | 多行 | 事务追踪 | 权限隔离 | AI 友好 | 扩展性 |
+|------|------|:------:|:----:|:--------:|:--------:|:-------:|:------:|
+| **ATP** | `terminal#t1:echo hello` | ✅ | ✅ 哨兵 | ✅ id | ✅ workspace | ✅ 纯文本 | ✅ 热插拔 |
+| Function Calling | JSON 嵌套调用 | ❌ | ❌ | ❌ | ❌ | ❌ JSON 转义 | ❌ |
+| Shell 脚本 | bash / bat 语法 | ❌ | ✅ | ❌ | ❌ | ❌ 语法复杂 | ❌ |
+| Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ | ❌ YAML 繁琐 | ✅ |
+| MCP | JSON-RPC | ❌ | ❌ | ✅ | ❌ | ❌ JSON 转义 | ✅ |
+| REST API | HTTP + JSON | ❌ | ❌ | ❌ | ❌ | ❌ 需独立定义 | ❌ |
+| gRPC | Protobuf | ❌ | ❌ | ❌ | ❌ | ❌ 编译依赖 | ❌ |
 
 ---
 
@@ -286,21 +278,6 @@ level:6
 # 文件解压
 unzip#uz1:./project_backup.zip
 to:./restored/
-```
-
-### 快速开发
-
-```
-# 一条指令文件创建整个项目脚手架
-run#r1:./init_project.cmd
-
-# init_project.cmd 内容:
-#   create#c1:./src/
-#   create#c2:./tests/
-#   create#c3:./README.md
-#   text@t1:
-#   # My Project
-#   t1
 ```
 
 ### 远程设备管理
