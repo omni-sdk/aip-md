@@ -4,7 +4,7 @@
 
 The Universal Language for AI-OS Interaction.
 
-[中文文档](./README_CN.md)
+[中文文档](./README.md)
 
 ---
 
@@ -188,49 +188,102 @@ to ensure instruction integrity, preventing truncation, tampering, and boundary 
 
 ---
 
-● IoT Example: Smart Home & Industrial Control
+● Examples
 
-### Light Control
+### IoT Device Control
 
 ```
-# Turn on all lights
+# Light control
 light#t1ss012:ON
-
-# Control a specific light
-light#t2ss013:ON
+light#t2ss013:OFF
 name:living_room
-```
 
-### Door Lock Control
-
-```
+# Door lock control
 door#t3ss223:LOCK
 name:gate
-
 door#t5ss225:UNLOCK
 name:gate
-```
 
-### Industrial Machinery
-
-```
-# Conveyor belt control
+# Industrial machinery
 conveyor#c1ss501:START
 speed:50
-
 conveyor#c2ss502:STOP
 
-# Robotic arm
 robot#r1ss601:MOVE
 axis:x
 position:120
-```
 
-### Temperature Sensor
-
-```
+# Temperature sensor
 sensor#t8ss401:TEMPERATURE
 name:outdoor
+```
+
+### File CRUD
+
+```
+# Create file or directory
+create#c1:./project/
+create#c2:./project/README.md
+text@t2:
+# My Project
+This is a new project created by ATP.
+t2
+
+# Read file
+read#r1:./project/README.md
+encoding:utf8
+
+# List directory
+list#l1:./project/
+
+# Update file (full replacement)
+update#u1:./project/README.md
+text@t3:
+# My Project - Updated
+Updated by ATP.
+t3
+
+# Append content to file
+append#a1:./project/README.md
+text@t4:
+Appended line by ATP.
+t4
+
+# Delete file
+delete#d1:./project/README.md
+
+# Delete directory
+delete#d2:./project/
+```
+
+### System Command Execution
+
+```
+# System info
+terminal#t1:uname -a
+terminal#t2:echo %OS%   (Windows)
+terminal#t3:df -h        (Linux disk usage)
+
+# Process management
+terminal#t4:ps aux | grep nginx
+terminal#t5:tasklist | findstr /c:"atp_ws"   (Windows)
+
+# Network diagnostic
+terminal#t6:ping -c 4 8.8.8.8     (Linux)
+terminal#t7:ping -n 4 8.8.8.8     (Windows)
+
+# Cron job
+terminal#t8:echo "0 3 * * * /usr/bin/backup.sh" | crontab -
+
+# File compression
+zip#z1:./project
+to:./project_backup.zip
+format:zip
+level:6
+
+# File extraction
+unzip#uz1:./project_backup.zip
+to:./restored/
 ```
 
 ### Rapid Development
@@ -246,6 +299,28 @@ run#r1:./init_project.cmd
 #   text@t1:
 #   # My Project
 #   t1
+```
+
+### Remote Device Management
+
+```
+# SSH login
+ssh#s1:
+host:192.168.0.100
+user:admin
+pass:password123
+
+# Execute remote command
+ssh#s1:session_id
+cmd:systemctl restart nginx
+
+# FTP file transfer
+ftp#f1:
+host:10.0.0.50
+user:ftpuser
+pass:ftppass123
+ftp#f1:session_id
+retr:/remote/file.txt
 ```
 
 ### Execution Result
