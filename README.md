@@ -10,7 +10,7 @@ The Universal Language for AI-OS Interaction.
 
 你只需要几分钟就学会让 AI 生成指令来操作系统、控制设备。
 
-ATP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平台自动化操作、IoT 设备指令控制、远程服务器管理等场景。
+ATP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平台自动化操作、IoT 设备指令控制、远程服务器管理、教学场景等。
 
 ---
 

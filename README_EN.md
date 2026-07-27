@@ -10,7 +10,7 @@ The Universal Language for AI-OS Interaction.
 
 It only takes a few minutes to learn how to let AI generate instructions to operate systems and control devices.
 
-ATP is designed for AI Agent development, LLM tool calling, AI workflow orchestration, cross-platform automation, IoT device command control, remote server management, and more.
+ATP is designed for AI Agent development, LLM tool calling, AI workflow orchestration, cross-platform automation, IoT device command control, remote server management, teaching scenarios, and more.
 
 ---
 
