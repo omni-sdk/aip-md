@@ -1,4 +1,4 @@
-# AITP - AI Transfer Protocol
+# AIP - Agent Interaction Protocol
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -10,43 +10,43 @@ The Universal Language for AI-OS Interaction.
 
 It only takes a few minutes to learn how to let AI generate instructions to operate systems and control devices.
 
-AITP is designed for AI Agent development, LLM tool calling, AI workflow orchestration, cross-platform automation, IoT device command control, remote server management, teaching scenarios, and more.
+AIP is designed for AI Agent development, LLM tool calling, AI workflow orchestration, cross-platform automation, IoT device command control, remote server management, teaching scenarios, and more.
 
-Prompt Guide: Copy the content of [PROMPT.md](./PROMPT.md) into your LLM's system prompt, and the AI will learn to generate AITP instructions.
+Prompt Guide: Copy the content of [PROMPT.md](./PROMPT.md) into your LLM's system prompt, and the AI will learn to generate AIP instructions.
 
 Verified by 2131 test cases, see [TEST_REPORT.md](./TEST_REPORT.md).
 
 ---
 
-● What is AITP?
+● What is AIP?
 
-AITP (AI Transfer Protocol) is an operating instruction protocol designed to provide a unified syntax for AI, humans, and devices. It defines a simple instruction format that allows different ends to interact with operating systems in the same way.
+AIP (Agent Interaction Protocol) is an operating instruction protocol designed to provide a unified syntax for AI, humans, and devices. It defines a simple instruction format that allows different ends to interact with operating systems in the same way.
 
-**What scenarios is AITP suitable for?**
+**What scenarios is AIP suitable for?**
 
 ```
 Scenario: AI operating personal computers
-Note: AI generates AITP instructions to create files and execute commands
+Note: AI generates AIP instructions to create files and execute commands
 Example: create#c1:./photos/  →  precise directory creation
 
 Scenario: Automating personal repetitive tasks
-Note: Write a series of operations as AITP instruction files for repeatable execution
+Note: Write a series of operations as AIP instruction files for repeatable execution
 Example: run#r1:./daily_backup.cmd  →  one command for batch operations
 
 Scenario: Developer project initialization
-Note: Use AITP instruction files to define project scaffolding
+Note: Use AIP instruction files to define project scaffolding
 Example: One instruction file creates the complete directory structure
 
 Scenario: Cross-platform operations
-Note: AITP instruction format is unified, platform automatically selects Linux PTY or Windows BAT
+Note: AIP instruction format is unified, platform automatically selects Linux PTY or Windows BAT
 Note: Command syntax must be written according to the platform
 
 Scenario: IoT device control
-Note: After implementing the AITP engine on the device, control via unified instruction format
+Note: After implementing the AIP engine on the device, control via unified instruction format
 Example: light#t1:ON  →  turn on light
 
 Scenario: Industrial machinery control
-Note: Use AITP instruction layer over serial/ethernet instead of proprietary PLC protocols
+Note: Use AIP instruction layer over serial/ethernet instead of proprietary PLC protocols
 Example: conveyor#c1:START speed:50
 
 Scenario: AI tool calling
@@ -54,7 +54,7 @@ Note: Provide a unified instruction generation format for large models
 Example: terminal#t1:echo hello  →  plain text, no JSON escaping needed
 
 Scenario: Remote device management
-Note: Manage remote servers via AITP's SSH/FTP instructions
+Note: Manage remote servers via AIP's SSH/FTP instructions
 Example: ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
 ```
 
@@ -62,9 +62,9 @@ Example: ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
 
 ● AI-Level Comparison
 
-AITP's plain-text design is more friendly for AI generation, fundamentally different from JSON formats.
+AIP's plain-text design is more friendly for AI generation, fundamentally different from JSON formats.
 
-| Dimension | AITP | JSON Function Calling |
+| Dimension | AIP | JSON Function Calling |
 |----------|-----|----------------------|
 | **AI Generation** | Direct text output, no escaping | Requires JSON escaping (quotes, newlines, backslashes) |
 | **Escape Handling** | Not needed (plain text + hash sentry) | Needs nested quote and special character handling |
@@ -77,7 +77,7 @@ AITP's plain-text design is more friendly for AI generation, fundamentally diffe
 **Token usage comparison:**
 
 ```
-# AITP (28 characters)
+# AIP (28 characters)
 terminal#t1:echo hello
 
 # JSON Function Calling (96 characters)
@@ -88,24 +88,24 @@ terminal#t1:echo hello
 
 ```
 Party 1 — AI generates:     terminal#t1:echo hello
-Party 2 — AITP Engine:       validates syntax + id uniqueness + hash boundaries
+Party 2 — AIP Engine:       validates syntax + id uniqueness + hash boundaries
 Party 3 — OS/Device:        executes and returns code:0 or error
 ```
 
 ---
 
-● Where does AITP run?
+● Where does AIP run?
 
-AITP sits in the middleware protocol layer between AI and OS/hardware.
+AIP sits in the middleware protocol layer between AI and OS/hardware.
 
 ```
 ┌─────────────────────────────────────────────┐
 │  AI Layer                                    │
-│  Generates AITP instruction text              │
+│  Generates AIP instruction text              │
 └──────────────────┬──────────────────────────┘
                    │ WebSocket / HTTP / Stdio
 ┌──────────────────▼──────────────────────────┐
-│  AITP Engine Layer                            │
+│  AIP Engine Layer                            │
 │  Instruction parsing, registry, scheduling   │
 │  Cross-platform: Linux PTY / Windows BAT     │
 └──────────────────┬──────────────────────────┘
@@ -128,7 +128,7 @@ AITP sits in the middleware protocol layer between AI and OS/hardware.
 
 | Solution | Syntax | Cross-Platform | Multi-line | Tx Tracking | Permission Isolation | AI Friendly | Extensible |
 |------|------|:------:|:----:|:--------:|:--------:|:-------:|:------:|
-| **AITP** | `terminal#t1:echo hello` | ✅ | ✅ Sentry | ✅ id | ✅ workspace | ✅ Plain Text | ✅ Hotplug |
+| **AIP** | `terminal#t1:echo hello` | ✅ | ✅ Sentry | ✅ id | ✅ workspace | ✅ Plain Text | ✅ Hotplug |
 | Function Calling | Nested JSON | ❌ | ❌ | ❌ | ❌ | ❌ JSON Escape | ❌ |
 | Shell Scripts | bash/bat syntax | ❌ | ✅ | ❌ | ❌ | ❌ Complex | ❌ |
 | Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ | ❌ YAML Verbose | ✅ |
@@ -210,7 +210,7 @@ create#c1:./project/
 create#c2:./project/README.md
 text@t2:
 # My Project
-This is a new project created by AITP.
+This is a new project created by AIP.
 t2
 
 # Read file
@@ -224,13 +224,13 @@ list#l1:./project/
 update#u1:./project/README.md
 text@t3:
 # My Project - Updated
-Updated by AITP.
+Updated by AIP.
 t3
 
 # Append content to file
 append#a1:./project/README.md
 text@t4:
-Appended line by AITP.
+Appended line by AIP.
 t4
 
 # Delete file

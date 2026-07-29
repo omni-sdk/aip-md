@@ -8,7 +8,7 @@ for filepath in glob.glob(os.path.join(root, '**', '*.md'), recursive=True):
         continue
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
-    new_content = content.replace('ATP', 'AITP')
+    new_content = content.replace('AITP', 'AIP')
     if new_content != content:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(new_content)

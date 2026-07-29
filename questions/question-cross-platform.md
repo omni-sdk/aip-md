@@ -1,12 +1,12 @@
-# AITP 如何支持跨平台？
+# AIP 如何支持跨平台？
 
 ## 问题
 
-AITP 在 Linux 和 Windows 上的行为是否一致？
+AIP 在 Linux 和 Windows 上的行为是否一致？
 
 ## 解答
 
-AITP 的指令格式在 Linux 和 Windows 上是完全一致的，但底层实现不同：
+AIP 的指令格式在 Linux 和 Windows 上是完全一致的，但底层实现不同：
 - Linux: 使用 PTY 伪终端，支持交互式命令和后台进程
 - Windows: 使用临时 BAT 脚本执行，功能等价
 

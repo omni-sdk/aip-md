@@ -32,7 +32,7 @@ t1
 
 ## 演示 Git 工作流
 
-教师可以用 AITP 指令来演示完整的 Git 操作流程：
+教师可以用 AIP 指令来演示完整的 Git 操作流程：
 
 ```atp
 terminal#t2:git init learning-project
@@ -52,7 +52,7 @@ terminal#t4:git -C learning-project add -A && git -C learning-project commit -m 
 
 学生问：请帮我创建一个简单的 Python 项目结构
 
-AI 生成 AITP 指令：
+AI 生成 AIP 指令：
 
 ```atp
 create#c2:./python_project/
@@ -67,7 +67,7 @@ t2
 create#c4:./python_project/README.md
 text@t3:
 # Python Project
-A simple project created with AITP.
+A simple project created with AIP.
 t3
 ```
 
