@@ -20,6 +20,45 @@ AIP 适用于 AI Agent 开发、LLM 工具调用、AI 工作流编排、跨平�
 
 ▶ 角色示例: [系统管理员](./roles/role-system-admin.md) · [DevOps](./roles/role-devops.md) · [数据科学家](./roles/role-data-scientist.md) · [家庭自动化](./roles/role-home-automation.md) · [物联网开发](./roles/role-iot-developer.md) · [后端开发](./roles/role-backend-dev.md) · [前端开发](./roles/role-frontend-dev.md) · [安全工程师](./roles/role-security-engineer.md) · [更多...](./roles/)
 
+● AIP 是怎么形成的？
+
+AIP 不是凭空设计出来的，它的诞生源于一个朴素的观察和长期的探索。
+
+**起点：对 Function Calling 的反思**
+
+在 AI Agent 开发中，作者发现现有的 LLM 工具调用方案——特别是 JSON Function Calling——存在根本性的问题：AI 生成 JSON 时，一个未转义的特殊字符就能让整个请求崩溃。多层嵌套、转义地狱、Token 浪费，这些都让 AI 和开发者备受折磨。这些痛点促使作者开始寻找一种更自然的 AI-OS 交互方式。
+
+**探索：从现有标准中汲取养分**
+
+为了找到最优解，作者系统性地研究了业界各种数据交换和配置格式，从中提取设计灵感：
+
+| 研究的技术 | 汲取的灵感 |
+|-----------|-----------|
+| **JSON / YAML** | 结构清晰，但转义复杂、冗余括号多 |
+| **Protobuf** | 高效紧凑，但对 AI 生成不友好，需要编译 |
+| **INI / TOML** | `key:value` 的简洁性，适合单行参数 |
+| **XML / HTML** | 标签闭合的确定性边界思想 |
+| **HTTP / RFC2046** | 协议分层、多部分边界标识的设计哲学 |
+| **JavaScript 模板字面量** | 多行字符串原生支持的优雅性 |
+| **Shell Here Document** | `<<EOF ... EOF` 的多行内容边界方案 |
+
+**成形：提炼 LLM 生成式内容的规律**
+
+通过大量实际测试和迭代，作者总结出 LLM 生成结构化指令的核心规律：
+
+1. **LLM 擅长生成纯文本**：避免让 AI 处理转义字符，纯文本的生成准确率远高于 JSON
+2. **边界标识胜过括号配对**：用显式的 hash 哨兵标记多行内容边界，远比括号嵌套更可靠
+
+**与国家标准的契合**
+
+本项目的设计思想与正在推进的国家标准 **GB/Z 185-2026《人工智能 智能体互联》**系列标准（特别是第 7 部分"智能体工具调用"）不谋而合。AIP 所倡导的纯文本交互、多智能体指令规范、跨平台统一调度等理念，与该标准的目标高度一致。
+
+作为一项开源社区驱动的协议，AIP 可以作为 GB/Z 185-2026 在工具调用与自动化操作层面的一种**轻量级、纯文本化的社区实现参考**，为开发者提供从理论到实践的快速落地路径。
+3. **单行优于多行**：单行指令格式简单，LLM 一次生成成功率极高
+4. **事务追踪不可或缺**：每条指令需要唯一 ID，用于异步回调、错误追踪和断点重试
+
+经过数十个版本的迭代打磨，AIP 最终形成了现在的形态：**纯文本、单行优先、hash 哨兵边界、id 事务追踪**。它不是凭空想象，而是从真实痛点出发，吸收多种技术精华，专为 LLM 生成而生的操作指令协议。
+
 ▶ 常见问题: [AIP 是什么？](./questions/question-what-is-atp.md) · [为什么不用 JSON？](./questions/question-why-not-json.md) · [如何开始使用？](./questions/question-how-to-use.md) · [如何跨平台？](./questions/question-cross-platform.md) · [如何保证安全？](./questions/question-security.md) · [与其他方案对比](./questions/question-vs-other.md) · [如何扩展？](./questions/question-extend.md) · [实际用途？](./questions/question-practical.md) · [更多...](./questions/)
 
 ---
