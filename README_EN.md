@@ -20,6 +20,51 @@ Verified by 2131 test cases, see [TEST_REPORT.md](./TEST_REPORT.md).
 
 ● What is AIP?
 
+● How was AIP formed?
+
+AIP was not designed in a vacuum—its birth stems from a simple observation and a long journey of exploration.
+
+**The Starting Point: Rethinking Function Calling**
+
+In AI Agent development, the author discovered fundamental flaws in existing LLM tool-calling solutions—particularly JSON Function Calling. A single unescaped character in AI-generated JSON could crash the entire request. Nested structures, escape hell, and wasted tokens plagued both AI and developers. These pain points sparked the search for a more natural AI-OS interaction paradigm.
+
+**The Exploration: Drawing from Existing Standards**
+
+To find the optimal solution, the author systematically studied various data exchange and configuration formats across the industry, extracting design inspiration:
+
+| Technology | Inspiration Drawn |
+|-----------|-----------|
+| **JSON / YAML** | Clear structure, but complex escaping and redundant brackets |
+| **Protobuf** | Efficient and compact, but AI-unfriendly and requires compilation |
+| **INI / TOML** | The simplicity of `key:value`, perfect for single-line parameters |
+| **XML / HTML** | The deterministic boundary concept of tag closure |
+| **HTTP / RFC2046** | Protocol layering and multi-part boundary identifier design philosophy |
+| **JavaScript Template Literals** | The elegance of native multi-line string support |
+| **Shell Here Document** | The `<<EOF ... EOF` multi-line content boundary approach |
+
+**The Formation: Distilling LLM Generative Patterns**
+
+Through extensive real-world testing and iteration, the author summarized the core principles of LLM structured instruction generation:
+
+1. **LLMs excel at generating plain text**: Avoid making AI handle escape characters; plain text generation accuracy far exceeds JSON
+2. **Boundary markers beat bracket pairing**: Using explicit hash sentries to mark multi-line content boundaries is far more reliable than nested brackets
+
+**Alignment with National Standards**
+
+The design philosophy of this project aligns closely with China's national standard **GB/Z 185-2026 "Artificial Intelligence — Agent Interconnection"** series (particularly Part 7: "Agent Tool Calling"). AIP's core concepts—plain text interaction, multi-agent instruction standardization, and cross-platform unified scheduling—resonate strongly with the standard's objectives.
+
+As an open-source community-driven protocol, AIP serves as a **lightweight, plain-text community implementation reference** for GB/Z 185-2026 in the domain of tool calling and automated operations, offering developers a rapid path from theory to practice.
+
+**Alignment with National Standards**
+
+The design philosophy of this project aligns closely with China's national standard **GB/Z 185-2026 "Artificial Intelligence — Agent Interconnection"** series (particularly Part 7: "Agent Tool Calling"). AIP's core concepts—plain text interaction, multi-agent instruction standardization, and cross-platform unified scheduling—resonate strongly with the standard's objectives.
+
+As an open-source community-driven protocol, AIP serves as a **lightweight, plain-text community implementation reference** for GB/Z 185-2026 in the domain of tool calling and automated operations, offering developers a rapid path from theory to practice.
+3. **Single-line beats multi-line**: Simple single-line instruction format achieves extremely high one-shot generation success rates
+4. **Transaction tracking is indispensable**: Every instruction needs a unique ID for async callbacks, error tracing, and checkpoint recovery
+
+After dozens of version iterations and refinements, AIP ultimately took its current form: **plain text, single-line priority, hash sentry boundaries, id transaction tracking**. It is not an imaginary construct, but an operating instruction protocol born from real pain points, absorbing the essence of multiple technologies, and purpose-built for LLM generation.
+
 AIP (Agent Interaction Protocol) is an operating instruction protocol designed to provide a unified syntax for AI, humans, and devices. It defines a simple instruction format that allows different ends to interact with operating systems in the same way.
 
 **What scenarios is AIP suitable for?**
