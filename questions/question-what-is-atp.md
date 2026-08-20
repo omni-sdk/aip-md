@@ -15,9 +15,9 @@ AIP 的指令格式是纯文本，不需要 JSON 转义，对 AI 生成非常友
 ## 示例
 
 ```atp
-terminal#t1:echo hello
+terminal#t1:echo hi
 ```
 
 ```json
-{"id":"t1","code":0,"text":"success","data":"hello"}
+{"id":"t1","code":0,"text":"success","data":"hi"}
 ```

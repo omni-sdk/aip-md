@@ -54,6 +54,7 @@ AIP 不是凭空设计出来的，它的诞生源于一个朴素的观察和长�
 本项目的设计思想与正在推进的国家标准 **GB/Z 185-2026《人工智能 智能体互联》**系列标准（特别是第 7 部分"智能体工具调用"）不谋而合。AIP 所倡导的纯文本交互、多智能体指令规范、跨平台统一调度等理念，与该标准的目标高度一致。
 
 作为一项开源社区驱动的协议，AIP 可以作为 GB/Z 185-2026 在工具调用与自动化操作层面的一种**轻量级、纯文本化的社区实现参考**，为开发者提供从理论到实践的快速落地路径。
+
 3. **单行优于多行**：单行指令格式简单，LLM 一次生成成功率极高
 4. **事务追踪不可或缺**：每条指令需要唯一 ID，用于异步回调、错误追踪和断点重试
 
@@ -72,7 +73,7 @@ AIP (Agent Interaction Protocol) 是一套操作指令协议，旨在为 AI、�
 ```
 场景: AI 操作个人电脑
 说明: AI 通过生成 AIP 指令来创建文件、执行命令，替代模糊的自然语言描述
-示例: create#c1:./photos/  →  精确创建目录
+示例: make#c1:./photos/  →  精确创建目录
 
 场景: 个人日常重复任务
 说明: 将一系列操作写成 AIP 指令文件，可重复执行
@@ -96,11 +97,11 @@ AIP (Agent Interaction Protocol) 是一套操作指令协议，旨在为 AI、�
 
 场景: AI 工具调用
 说明: 为大模型提供统一的指令生成格式，替代各家自定义的工具调用方案
-示例: terminal#t1:echo hello  →  纯文本，无需 JSON 转义
+示例: execute#t1:echo hi  →  纯文本，无需 JSON 转义
 
 场景: 远程设备管理
 说明: 通过 AIP 的 SSH/FTP 指令管理远程服务器
-示例: ssh#s1:192.168.0.100 + terminal#t1:systemctl restart nginx
+示例: ssh#s1:192.168.0.100 + execute#t1:systemctl restart nginx
 ```
 
 ---
@@ -113,7 +114,7 @@ AIP 的纯文本设计对 AI 生成更友好，与 JSON 格式有本质区别。
 |----------|-----|----------------------|
 | **AI 生成方式** | 直接文本输出，无需转义 | 需要 JSON 转义（引号、换行、反斜杠） |
 | **转义处理** | 不需要（纯文本 + hash 哨兵） | 需要处理嵌套引号和特殊字符 |
-| **Token 消耗** | 较少: `terminal#t1:echo hello` (28 字符) | 较多: `{"name":"run_cmd","arguments":{"cmd":"echo hello"}}` (96 字符) |
+| **Token 消耗** | 较少: `execute#t1:echo hi` (24 字符) | 较多: `{"name":"run_cmd","arguments":{"cmd":"echo hi"}}` (96 字符) |
 | **三方校验** | 内置 id + hash 边界 | 需要外部 schema 验证 |
 | **解析容错** | Hash 哨兵防止边界错乱 | 一个未转义字符破坏整个 JSON |
 | **可读性** | 人类可直接读写 | 需要理解 JSON 结构 |
@@ -122,17 +123,17 @@ AIP 的纯文本设计对 AI 生成更友好，与 JSON 格式有本质区别。
 **Token 消耗对比示例:**
 
 ```
-# AIP (28 字符)
-terminal#t1:echo hello
+# AIP (24 字符)
+execute#t1:echo hi
 
 # JSON Function Calling (96 字符)
-{"tool":"terminal","id":"t1","parameters":{"command":"echo hello"}}
+{"tool":"execute","id":"t1","parameters":{"command":"echo hi"}}
 ```
 
 **三方校验:**
 
 ```
-第一方 — AI 生成:       terminal#t1:echo hello
+第一方 — AI 生成:       execute#t1:echo hi
 第二方 — AIP 引擎:      验证语法 + id 唯一性 + hash 边界
 第三方 — OS/设备:        执行并返回 code:0 或错误信息
 ```
@@ -173,7 +174,7 @@ AIP 位于 AI 与操作系统/硬件之间的中间协议层。
 
 | 方案 | 语法 | 跨平台 | 多行 | 事务追踪 | 权限隔离 | AI 友好 | 扩展性 |
 |------|------|:------:|:----:|:--------:|:--------:|:-------:|:------:|
-| **AIP** | `terminal#t1:echo hello` | ✅ | ✅ 哨兵 | ✅ id | ✅ workspace | ✅ 纯文本 | ✅ 热插拔 |
+| **AIP** | `execute#t1:echo hi` | ✅ | ✅ 哨兵 | ✅ id | ✅ workspace | ✅ 纯文本 | ✅ 热插拔 |
 | Function Calling | JSON 嵌套调用 | ❌ | ❌ | ❌ | ❌ | ❌ JSON 转义 | ❌ |
 | Shell 脚本 | bash / bat 语法 | ❌ | ✅ | ❌ | ❌ | ❌ 语法复杂 | ❌ |
 | Ansible | YAML playbook | ✅ | ✅ | ❌ | ❌ | ❌ YAML 繁琐 | ✅ |
@@ -202,7 +203,7 @@ hash2
 ### id 规则
 
 ```
-事务唯一编号，长度 4~16 位，由字母、数字组合而成。
+事务唯一编号，长度 4~32 位，由字母、数字、-_ 组合而成。
 用于事务溯源、任务排序、断点重试、多指令隔离。
 每次输出的 id 必须保持唯一性。
 ```
@@ -210,10 +211,113 @@ hash2
 ### hash 规则
 
 ```
-hash 值作为哨兵内容边界标识，长度 6~16 位，由随机字母+数字组合。
+hash 值作为哨兵内容边界标识，长度 6~32 位，由随机字母、数字、-_ 组合。
 每组 hash 值与其他范围 hash 保持完全不重复，
 且完整包裹多行参数或文本，确保指令完整性。
 每组的 hash 必须保持唯一性且成对出现。
+```
+
+---
+
+● 指令清单
+
+| 指令 | 说明 |
+|------|------|
+| make | 创建文件或目录，可写入内容 |
+| write | 覆盖性修改文件，支持局部行修改 |
+| delete | 删除文件或文件夹（回收至 .trash） |
+| read | 读取文件内容，支持行/字符范围 |
+| list | 列出目录下所有文件 |
+| tree | 查看目录树 |
+| rename | 重命名文件或目录 |
+| move | 移动文件或目录 |
+| copy | 复制文件或文件夹 |
+| append | 追加内容到文件末尾 |
+| stat | 查看文件元信息 |
+| find | 递归查找文件 |
+| replace | 替换文件内容，支持递归和行范围 |
+| insert | 插入内容到文件指定位置 |
+| length | 计算子指令返回数据的长度 |
+| regex | 正则检索 |
+| uname | 查看当前系统信息 |
+| ftp | FTP 远程文件管理 |
+| ssh | SSH 远程管理 |
+| pipe | 保存子指令结果到文件 |
+| zip | 压缩文件或目录 |
+| unzip | 解压文件 |
+| execute | 执行指令（跨平台） |
+| terminal | 终端执行指令（execute 兜底） |
+| daemon | 后台进程管理 |
+| chmod | 文件权限设置 |
+| chown | 文件归属设置 |
+| sys_power | 系统电源（锁屏、休眠、关机、重启） |
+| knowledge | 知识库管理 |
+| task | 任务管理 |
+| when | 条件触发执行 |
+| fetch | 访问网络接口、网页、下载文件 |
+| run | 运行 AIP 指令文件 |
+| help | 获取帮助文档 |
+| version | 获取 AIP 版本 |
+
+---
+
+● 示例
+
+### 文件创建与读取
+
+```
+make#c1:./project/
+make#c2:./project/README.md
+text@t2:
+# My Project
+This is a new project created by AIP.
+t2
+read#r1:./project/README.md
+```
+
+### 执行系统指令
+
+```
+execute#t1:echo hello
+execute#t2:go build -o app
+at:./demo
+terminal#t3:echo world
+```
+
+### 远程管理
+
+```
+ssh#s1:
+host:192.168.0.100
+port:22
+user:admin
+pass:password123
+ssh#s1:session_id
+cmd:systemctl restart nginx
+ftp#f1:
+host:10.0.0.50
+user:ftpuser
+pass:ftppass123
+```
+
+### 条件触发
+
+```
+when#w1:make#c1:./temp/
+if:[c1.code]==20
+then@t1:
+stat#s1:./temp/
+t1
+```
+
+### 网络请求
+
+```
+fetch#f1:https://api.example.com/data
+mode:links
+fetch#f2:https://api.example.com/data
+method:post
+payload:{"name":"test"}
 ```
 
 ---

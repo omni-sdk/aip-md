@@ -18,8 +18,8 @@ AIP 的纯文本格式对 AI 生成更友好：
 
 ```
 # AIP (28 字符)
-terminal#t1:echo hello
+terminal#t1:echo hi
 
 # JSON Function Calling (96 字符)
-{"tool":"terminal","id":"t1","parameters":{"command":"echo hello"}}
+{"tool":"terminal","id":"t1","parameters":{"command":"echo hi"}}
 ```
