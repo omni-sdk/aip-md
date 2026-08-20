@@ -647,21 +647,21 @@ user:gem
 file:./script.sh
 
 ## 系统电源
-sys_power
+power
 ### 参数说明
 action:主操作[lock|sleep|shutdown|reboot|cancel]
 delay:可选，延时执行；单位y年、M月、d日、h时、m分、s秒、S毫秒
 
 ### 格式说明
-sys_power#id:lock
-sys_power#id:sleep
-sys_power#id:shutdown
+power#id:lock
+power#id:sleep
+power#id:shutdown
 [delay:time_expr]
-sys_power#id:reboot
-sys_power#id:cancel
+power#id:reboot
+power#id:cancel
 
 ### 示例
-sys_power#rt8s5a:shutdown
+power#rt8s5a:shutdown
 delay:1m5s
 
 ## 知识库

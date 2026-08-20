@@ -203,7 +203,7 @@ to ensure instruction integrity.
 | daemon | Background process management |
 | chmod | Set file permissions |
 | chown | Set file ownership |
-| sys_power | System power (lock, sleep, shutdown, reboot) |
+| power | System power (lock, sleep, shutdown, reboot) |
 | knowledge | Knowledge base management |
 | task | Task management |
 | when | Conditional trigger execution |
