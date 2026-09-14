@@ -7,13 +7,16 @@
 AI 生成的 AIP 指令：
 
 ```atp
-create#c1:./photos/
+make#c1:./photos/
 ```
 
 AIP 引擎执行并返回：
 
-```json
-{"id":"c1","code":0,"text":"success","data":"./photos/"}
+```text
+id:c1
+code:20
+text:success
+data:./photos/
 ```
 
 ---
@@ -30,8 +33,14 @@ terminal#t1:df -h
 
 AIP 引擎执行并返回：
 
-```json
-{"id":"t1","code":0,"text":"success","data":"/dev/sda2  215G  13G  192G  7% /"}
+```text
+id:t1
+code:20
+text:success
+data@d1:
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2       215G   13G  192G   7% /
+d1
 ```
 
 ---
@@ -40,17 +49,20 @@ AIP 引擎执行并返回：
 
 用户说："把客厅的灯关掉"
 
-AI 生成的 AIP 指令：
+AI 生成的 AIP 指令（需设备端实现 AIP 引擎）：
 
 ```atp
 light#t1:OFF
 name:living_room
 ```
 
-AIP 引擎执行并返回：
+设备返回：
 
-```json
-{"id":"t1","code":0,"text":"success","data":"living_room light turned off"}
+```text
+id:t1
+code:20
+text:success
+data:living_room light turned off
 ```
 
 ---
@@ -68,8 +80,13 @@ user:admin
 pass:password123
 ```
 
-```json
-{"id":"s1","code":0,"text":"success","data":"session_id: abc123"}
+AIP 引擎执行并返回：
+
+```text
+id:s1
+code:20
+text:success
+data:session_id: abc123
 ```
 
 AI 继续生成：
@@ -79,6 +96,11 @@ ssh#s2:abc123
 cmd:systemctl restart nginx
 ```
 
-```json
-{"id":"s2","code":0,"text":"success","data":"nginx restarted"}
+返回：
+
+```text
+id:s2
+code:20
+text:success
+data:nginx restarted
 ```

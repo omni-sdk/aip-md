@@ -17,20 +17,20 @@
 ## 指令规则
 namespace.command#id:主参数          ← 推荐格式（命名空间.指令名）
 command#id:主参数                    ← 兼容格式（无命名空间）
-command#id@hash:                    ← 主参数多行（哨兵块开始）
+command#id@sentry:                    ← 主参数多行（哨兵块开始）
 多行主参数内容
-hash                                 ← 哨兵块结束
+sentry                                 ← 哨兵块结束
 单行参数:参数值
-多行参数@hash2:
+多行参数@sentry2:
 任意多行内容
-hash2
+sentry2
 
 ## id规则
 事务唯一编号，长度4~32位，由字母、数字、-_ 组合而成
 用于事务溯源、任务排序、断点重试、多指令隔离，必须保持每次输出的唯一性；
 
-## hash规则
-hash值作为哨兵内容边界标识，长度6~32位，由随机字母、数字、-_ 组合，每组hash值与其他范围hash保持完全不重复，
+## sentry规则
+sentry值作为哨兵内容边界标识，长度6~32位，由随机字母、数字、-_ 组合，每组sentry值与其他范围sentry保持完全不重复，
 且完整包裹多行参数或文本，确保指令完整性，防止截断、篡改、边界错乱，必须保持每组的唯一性且成对出现；
 
 ## 响应说明
@@ -39,9 +39,9 @@ id:事务唯一编号
 code:状态码（20 成功，21 截断，40 客户端错误，50 超时等）
 text:提示文本
 [data:单行执行返回结果]
-[data@hash:
+[data@sentry:
 多行执行返回结果
-hash]
+sentry]
 
 truncated 为 true 时追加：
 truncated:true
@@ -76,20 +76,20 @@ total:data 原始总字节数
 make
 ### 参数说明
 id:参考id规则
-hash:参考hash规则
+sentry:参考sentry规则
 path:目标路径；末尾/=目录，无/=文件
 encoding:文件编码[utf8|utf16|utf16le|utf16be|gbk|gb2312|gb18030|big5]，默认utf8，可省略
 
 ### 格式说明
 make#id:path
-make#id@hash:
+make#id@sentry:
 dir1/
 dir2/
-hash
+sentry
 make#id:file_path
-text@hash:
+text@sentry:
 content
-hash
+sentry
 [encoding:xxx]
 
 ### 示例
@@ -103,7 +103,7 @@ X5k2p9
 write
 ### 参数说明
 id:参考id规则
-hash:参考hash规则
+sentry:参考sentry规则
 file path:目标文件路径
 span:可选，行范围`start,end`；不填为全文件覆盖修改
 encoding:文件编码，默认utf8
@@ -111,15 +111,15 @@ encoding:文件编码，默认utf8
 ### 格式说明
 write#id:file_path
 [encoding:xxx]
-text@hash:
+text@sentry:
 content
-hash
+sentry
 
 write#id:file_path
 span:start,end
-text@hash:
+text@sentry:
 content
-hash
+sentry
 
 ### 示例
 write#c8gh7p:./hello.txt
@@ -134,10 +134,10 @@ path:目标路径；末尾/=文件夹，无/=文件
 
 ### 格式说明
 delete#id:path
-delete#id@hash:
+delete#id@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 delete#c8gh2p:./hello.txt
@@ -157,10 +157,10 @@ read#id:path
 [range:start,end]
 [encoding:xxx]
 
-read#id@hash:
+read#id@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 read#c2gh2p:./hello.txt
@@ -178,10 +178,10 @@ args:可选，执行参数；`l`长格式，`a`显示隐藏文件，可组合使
 ### 格式说明
 list#id:path
 [args:xxx]
-list#id@hash:
+list#id@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 list#c3go2p:./
@@ -197,10 +197,10 @@ args:可选，执行参数；`a`显示隐藏文件
 ### 格式说明
 tree#id:path
 [args:xxx]
-tree#id@hash:
+tree#id@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 tree#c3go2p:./
@@ -229,10 +229,10 @@ to:目标存放路径
 ### 格式说明
 move#id:path
 to:target_path
-move#id@hash:
+move#id@sentry:
 path1
 path2
-hash
+sentry
 to:target_path
 
 ### 示例
@@ -248,10 +248,10 @@ to:目标存放路径
 ### 格式说明
 copy#id:path
 to:target_path
-copy#id@hash:
+copy#id@sentry:
 path1
 path2
-hash
+sentry
 to:target_path
 
 ### 示例
@@ -266,9 +266,9 @@ encoding:文件编码，默认utf8
 
 ### 格式说明
 append#id:path
-text@hash:
+text@sentry:
 content
-hash
+sentry
 [encoding:xxx]
 
 ### 示例
@@ -284,10 +284,10 @@ path:目标文件/目录路径
 
 ### 格式说明
 stat#id:path
-stat#id@hash:
+stat#id@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 stat#kers6p:./hello.txt
@@ -296,23 +296,23 @@ stat#kers6p:./hello.txt
 find
 ### 参数说明
 path:搜索根路径，可选，默认`./
-name:可选，文件名匹配；支持通配/正则，单行或多行hash模式
-text:可选，文件内容匹配；关键词/正则，单行或多行hash模式
+name:可选，文件名匹配；支持通配/正则，单行或多行sentry模式
+text:可选，文件内容匹配；关键词/正则，单行或多行sentry模式
 
 ### 格式说明
 find#id:path
 name:pattern
 text:pattern
 find#id:path
-name@hash:
+name@sentry:
 pattern1
 pattern2
-hash
+sentry
 find#id:path
-text@hash:
+text@sentry:
 content1
 content2
-hash
+sentry
 
 ### 示例
 find#kers7t:
@@ -324,19 +324,19 @@ name:*.txt
 replace
 ### 参数说明
 path:目标文件/目录路径；传入目录则执行递归替换
-raw:需要被替换的原始内容，单行或多行hash模式
-new:替换后的新内容，单行或多行hash模式
+raw:需要被替换的原始内容，单行或多行sentry模式
+new:替换后的新内容，单行或多行sentry模式
 span:可选，行范围`start,end`
 encoding:文件编码，默认utf8
 
 ### 格式说明
 replace#id:path
-raw@hash:
+raw@sentry:
 old_content
-hash
-new@hash:
+sentry
+new@sentry:
 new_content
-hash
+sentry
 [encoding:xxx]
 
 ### 示例
@@ -358,9 +358,9 @@ encoding:文件编码，默认utf8
 ### 格式说明
 insert#id:path
 lines:+N
-text@hash:
+text@sentry:
 content
-hash
+sentry
 
 ### 示例
 insert#ktrs2p:./text.txt
@@ -372,9 +372,9 @@ kyuo5p
 ## 计算指令返回数据的长度
 length
 ### 格式说明
-length#id@hash:
+length#id@sentry:
 sub_command
-hash
+sentry
 
 ### 示例
 length#rt8s5a@X7k2p9:
@@ -384,15 +384,15 @@ X7k2p9
 ## 正则检索
 regex
 ### 参数说明
-pattern:正则表达式，主参数；单行直接写，多行使用@hash哨兵
-text:待处理数据源，支持子指令多行hash包裹
+pattern:正则表达式，主参数；单行直接写，多行使用@sentry哨兵
+text:待处理数据源，支持子指令多行sentry包裹
 
 ### 格式说明
 regex#id:pattern
-text@hash:
+text@sentry:
 sub_command1
 sub_command2
-hash
+sentry
 
 ### 示例
 regex#rt8s5a:单行正则表达式
@@ -451,20 +451,20 @@ ssh#id:session_id
 [timeout:N]
 cmd:command_text
 ssh#id:session_id
-cmd@hash:
+cmd@sentry:
 cmd1
 cmd2
-hash
+sentry
 ssh#id:session_id
 log:start,end
 ssh#id:session_id
 [recurse:true]
-get@hash:
+get@sentry:
 remote_path1
-hash
-to@hash:
+sentry
+to@sentry:
 local_path1
-hash
+sentry
 ssh#id:session_id
 quit:
 
@@ -479,15 +479,15 @@ pass:你的密码
 pipe
 ### 参数说明
 path:输出保存的目标文件路径
-text:待保存的子指令集合，支持多行hash模式
+text:待保存的子指令集合，支持多行sentry模式
 encoding:文件编码，默认utf8
 
 ### 格式说明
 pipe#id:path
-text@hash:
+text@sentry:
 sub_command1
 sub_command2
-hash
+sentry
 
 ### 示例
 pipe#rt8s5a:./temp/a.txt
@@ -546,10 +546,10 @@ execute#id:command
 [timeout:duration]
 [encoding:code_page]
 [async:true]
-execute#id@hash:
+execute#id@sentry:
 cmd1
 cmd2
-hash
+sentry
 
 ### 示例
 execute#rt8s5a:echo hello
@@ -604,7 +604,7 @@ chmod
 ### 参数说明
 mode:权限模式（八进制），主参数
 file:可选，单文件路径
-files:可选，多文件路径，多行hash模式
+files:可选，多文件路径，多行sentry模式
 recurse:可选，true递归处理目录
 
 ### 格式说明
@@ -612,10 +612,10 @@ chmod#id:mode_octal
 file:path
 chmod#id:mode_octal
 [recurse:true]
-files@hash:
+files@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 chmod#rt8s5a:0755
@@ -635,10 +635,10 @@ chown#id:
 user:username
 group:groupname
 [recurse:true]
-files@hash:
+files@sentry:
 path1
 path2
-hash
+sentry
 
 ### 示例
 chown#rt8s5a:
@@ -678,9 +678,9 @@ size:M
 knowledge#id:
 upsert:category/path/file.md
 [describe:doc_desc]
-[content@hash:
+[content@sentry:
 doc_content
-hash]
+sentry]
 knowledge#id:
 delete:category/path/file.md
 knowledge#id:
@@ -711,13 +711,13 @@ size:M
 task#id:task_id
 task#id:
 name:task_name
-detail@hash:
+detail@sentry:
 task_detail_content
-hash
+sentry
 task#id:task_id
-add@hash:
+add@sentry:
 sub_progress_content
-hash
+sentry
 task#id:task_id
 childId:sub_progress_id
 status:state_enum
@@ -738,21 +738,21 @@ ff68sa
 ## 条件触发执行
 when
 ### 参数说明
-主内容:必选，待观测执行的子指令集合，单行或多行hash哨兵包裹
+主内容:必选，待观测执行的子指令集合，单行或多行sentry哨兵包裹
 if:必选，单行条件表达式；支持`== != || && ! > < >= <=`，可引用`[id.code]`、`[id.text]`、`[id.data]`
-then:必选，条件成立执行子指令集合，单行或多行hash模式
+then:必选，条件成立执行子指令集合，单行或多行sentry模式
 else:可选，条件不成立执行子指令集合
 timeout:可选，整体执行超时，默认30s
 
 ### 格式说明
 when#id:sub_command
 if:condition_expr
-then@hash:
+then@sentry:
 sub_then_command
-hash
-[else@hash:
+sentry
+[else@sentry:
 sub_else_command
-hash]
+sentry]
 [timeout:duration]
 
 ### 示例
@@ -768,23 +768,23 @@ fetch
 url:请求URL，主参数
 method:可选，请求方式[get|post|put|patch|delete|head|options]，默认get
 timeout:可选，请求超时，默认30秒
-payload:可选，请求体数据，单行或多行hash模式
+payload:可选，请求体数据，单行或多行sentry模式
 save:可选，将响应内容保存至本地文件
 async:可选，true开启异步下载
 mode:可选，内容解析模式[text|links|html|json|structured|markdown|table|meta]，默认links
-files:可选，上传文件集合，多行hash模式
+files:可选，上传文件集合，多行sentry模式
 proxy:可选，代理地址；支持http://、https://、socks5://
-header:可选，请求头配置，多行hash模式
+header:可选，请求头配置，多行sentry模式
 
 ### 格式说明
 fetch#id:url
 [timeout:N]
 [mode:parse_mode]
 [proxy:proxy_addr]
-[header@hash:
+[header@sentry:
 k1:v1
 k2:v2
-hash]
+sentry]
 fetch#id:url
 method:post
 [payload:json_string]
@@ -803,7 +803,7 @@ save:./file.pdf
 ## 运行AIP指令文件
 run
 ### 参数说明
-path:主参数，指令文件路径；单行直接填写，多文件使用@hash哨兵包裹
+path:主参数，指令文件路径；单行直接填写，多文件使用@sentry哨兵包裹
 shared:可选，true开启共享作用域，false隔离作用域；默认false
 timeout:可选，脚本整体超时，默认120s
 
@@ -811,10 +811,10 @@ timeout:可选，脚本整体超时，默认120s
 run#id:file_path
 [shared:true]
 [timeout:duration]
-run#id@hash:
+run#id@sentry:
 file_path1
 file_path2
-hash
+sentry
 
 ### 示例
 run#rt8s5a:./make_ftpser.cmd

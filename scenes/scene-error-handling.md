@@ -6,8 +6,13 @@
 terminal#t1:ls /nonexistent_dir
 ```
 
-```json
-{"id":"t1","code":1,"text":"terminal: command failed","data":"ls: cannot access '/nonexistent_dir': No such file or directory"}
+```text
+id:t1
+code:52
+text:terminal: command failed
+data@d1:
+ls: cannot access '/nonexistent_dir': No such file or directory
+d1
 ```
 
 ---
@@ -19,8 +24,11 @@ terminal#t2:sleep 10 && echo never
 timeout:1s
 ```
 
-```json
-{"id":"t2","code":4,"text":"terminal: timeout after 1s","data":""}
+```text
+id:t2
+code:50
+text:terminal: timeout after 1s
+data:
 ```
 
 ---
@@ -28,19 +36,23 @@ timeout:1s
 ## 条件判断：创建成功后读取
 
 ```atp
-when#w1:create#c1:./test.txt
-text@t1:
-success
-t1
-if:[c1.code]==0
+when#w1:make#c1:./test.txt
+if:[c1.code]==20
 then@then1:
 read#r1:./test.txt
 then1
 ```
 
-```json
-{"id":"c1","code":0,"text":"success","data":"./test.txt"}
-{"id":"r1","code":0,"text":"success","data":"success"}
+```text
+id:c1
+code:20
+text:success
+data:./test.txt
+
+id:r1
+code:20
+text:success
+data:
 ```
 
 ---
@@ -49,12 +61,15 @@ then1
 
 ```atp
 terminal#t3:go build -o app.exe
-workdir:./project
+at:./project
 async:true
 ```
 
-```json
-{"id":"t3","code":2,"text":"async pending","data":"async started, log: /logs/terminal.log"}
+```text
+id:t3
+code:10
+text:async pending
+data:async started, log: /logs/terminal.log
 ```
 
 ---
@@ -65,6 +80,9 @@ async:true
 read#r2:./nonexistent_file.txt
 ```
 
-```json
-{"id":"r2","code":5,"text":"read: file not found: ./nonexistent_file.txt","data":null}
+```text
+id:r2
+code:42
+text:read: file not found: ./nonexistent_file.txt
+data:
 ```

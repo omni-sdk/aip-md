@@ -67,12 +67,12 @@ AIP's plain-text design is more friendly for AI generation, fundamentally differ
 | Dimension | AIP | JSON Function Calling |
 |----------|-----|----------------------|
 | **AI Generation** | Direct text output, no escaping | Requires JSON escaping (quotes, newlines, backslashes) |
-| **Escape Handling** | Not needed (plain text + hash sentry) | Needs nested quote and special character handling |
+| **Escape Handling** | Not needed (plain text + sentry sentry) | Needs nested quote and special character handling |
 | **Token Usage** | Lower: `execute#t1:echo hi` (24 chars) | Higher: `{"name":"run_cmd","arguments":{"cmd":"echo hi"}}` (96 chars) |
-| **Verification** | Built-in id + hash boundaries | Requires external schema validation |
+| **Verification** | Built-in id + sentry boundaries | Requires external schema validation |
 | **Parse Tolerance** | Hash sentry prevents boundary errors | Single unescaped character breaks entire JSON |
 | **Readability** | Human readable and writable | Requires understanding JSON structure |
-| **Multi-line** | Native hash sentry mode | Requires `\n` escaping or array strings |
+| **Multi-line** | Native sentry sentry mode | Requires `\n` escaping or array strings |
 
 **Token usage comparison:**
 
@@ -88,7 +88,7 @@ execute#t1:echo hi
 
 ```
 Party 1 — AI generates:     execute#t1:echo hi
-Party 2 — AIP Engine:       validates syntax + id uniqueness + hash boundaries
+Party 2 — AIP Engine:       validates syntax + id uniqueness + sentry boundaries
 Party 3 — OS/Device:        executes and returns code:20 or error
 ```
 
@@ -145,13 +145,13 @@ AIP sits in the middleware protocol layer between AI and OS/hardware.
 ```
 namespace.command#id:main_param         ← Recommended (namespace.command)
 command#id:main_param                   ← Compatible (no namespace)
-command#id@hash:                        ← Multi-line main param (sentry start)
+command#id@sentry:                        ← Multi-line main param (sentry start)
 multi-line content
-hash                                    ← Sentry end
+sentry                                    ← Sentry end
 key:value                               ← Single-line param
-key@hash2:
+key@sentry2:
 multi-line content
-hash2
+sentry2
 ```
 
 ### ID Rules
@@ -166,7 +166,7 @@ Each output must have a unique id.
 
 ```
 Hash serves as sentry boundary marker, 6-32 random characters (letters, digits, - and _).
-Each hash must be unique and paired, wrapping multi-line content
+Each sentry must be unique and paired, wrapping multi-line content
 to ensure instruction integrity.
 ```
 

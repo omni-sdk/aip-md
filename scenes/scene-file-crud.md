@@ -3,11 +3,14 @@
 ## 创建文件
 
 ```atp
-create#c1:./project/
+make#c1:./project/
 ```
 
-```json
-{"id":"c1","code":0,"text":"success","data":"./project/"}
+```text
+id:c1
+code:20
+text:success
+data:./project/
 ```
 
 ---
@@ -15,15 +18,18 @@ create#c1:./project/
 ## 创建文件并写入内容
 
 ```atp
-create#c2:./project/README.md
+make#c2:./project/README.md
 text@t2:
 # My Project
 This is a new project created by AIP.
 t2
 ```
 
-```json
-{"id":"c2","code":0,"text":"success","data":"./project/README.md"}
+```text
+id:c2
+code:20
+text:success
+data:./project/README.md
 ```
 
 ---
@@ -32,11 +38,16 @@ t2
 
 ```atp
 read#r1:./project/README.md
-encoding:utf8
 ```
 
-```json
-{"id":"r1","code":0,"text":"success","data":"# My Project\nThis is a new project created by AIP."}
+```text
+id:r1
+code:20
+text:success
+data@t3:
+# My Project
+This is a new project created by AIP.
+t3
 ```
 
 ---
@@ -47,8 +58,11 @@ encoding:utf8
 list#l1:./project/
 ```
 
-```json
-{"id":"l1","code":0,"text":"success","data":"README.md"}
+```text
+id:l1
+code:20
+text:success
+data:README.md
 ```
 
 ---
@@ -62,8 +76,11 @@ Appended line by AIP.
 t4
 ```
 
-```json
-{"id":"a1","code":0,"text":"success","data":"./project/README.md"}
+```text
+id:a1
+code:20
+text:success
+data:./project/README.md
 ```
 
 ---
@@ -74,8 +91,11 @@ t4
 delete#d1:./project/README.md
 ```
 
-```json
-{"id":"d1","code":0,"text":"success","data":"./project/README.md"}
+```text
+id:d1
+code:20
+text:success
+data:./project/README.md
 ```
 
 ---
@@ -86,6 +106,9 @@ delete#d1:./project/README.md
 delete#d2:./project/
 ```
 
-```json
-{"id":"d2","code":0,"text":"success","data":"./project/"}
+```text
+id:d2
+code:20
+text:success
+data:./project/
 ```

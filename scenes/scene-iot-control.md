@@ -1,5 +1,7 @@
 # 物联网设备控制
 
+> 说明：本场景演示的是设备端实现 AIP 引擎后的语义设计。当前 AIP 引擎不内置 IoT 指令，设备厂商需按照 AIP 协议规范在设备端自行注册 light、ac、door、conveyor 等指令。
+
 ## 控制灯泡
 
 ### 开灯（所有灯）
@@ -8,8 +10,11 @@
 light#t1ss012:ON
 ```
 
-```json
-{"id":"t1ss012","code":0,"text":"success","data":"all lights turned on"}
+```text
+id:t1ss012
+code:20
+text:success
+data:all lights turned on
 ```
 
 ### 关灯（所有灯）
@@ -18,8 +23,11 @@ light#t1ss012:ON
 light#t1ss012:OFF
 ```
 
-```json
-{"id":"t1ss012","code":0,"text":"success","data":"all lights turned off"}
+```text
+id:t1ss012
+code:20
+text:success
+data:all lights turned off
 ```
 
 ### 指定某个灯
@@ -29,8 +37,11 @@ light#t2ss013:ON
 name:living_room
 ```
 
-```json
-{"id":"t2ss013","code":0,"text":"success","data":"living_room light turned on"}
+```text
+id:t2ss013
+code:20
+text:success
+data:living_room light turned on
 ```
 
 ---
@@ -44,8 +55,11 @@ door#t3ss223:LOCK
 name:gate
 ```
 
-```json
-{"id":"t3ss223","code":0,"text":"success","data":"gate locked"}
+```text
+id:t3ss223
+code:20
+text:success
+data:gate locked
 ```
 
 ### 解锁
@@ -55,8 +69,11 @@ door#t5ss225:UNLOCK
 name:gate
 ```
 
-```json
-{"id":"t5ss225","code":0,"text":"success","data":"gate unlocked"}
+```text
+id:t5ss225
+code:20
+text:success
+data:gate unlocked
 ```
 
 ---
@@ -70,8 +87,11 @@ conveyor#c1ss501:START
 speed:50
 ```
 
-```json
-{"id":"c1ss501","code":0,"text":"success","data":"conveyor started at speed 50"}
+```text
+id:c1ss501
+code:20
+text:success
+data:conveyor started at speed 50
 ```
 
 ### 传送带停止
@@ -80,8 +100,11 @@ speed:50
 conveyor#c2ss502:STOP
 ```
 
-```json
-{"id":"c2ss502","code":0,"text":"success","data":"conveyor stopped"}
+```text
+id:c2ss502
+code:20
+text:success
+data:conveyor stopped
 ```
 
 ### 机械臂移动
@@ -92,8 +115,11 @@ axis:x
 position:120
 ```
 
-```json
-{"id":"r1ss601","code":0,"text":"success","data":"robot moved to x:120"}
+```text
+id:r1ss601
+code:20
+text:success
+data:robot moved to x:120
 ```
 
 ---
@@ -105,6 +131,9 @@ sensor#t8ss401:TEMPERATURE
 name:outdoor
 ```
 
-```json
-{"id":"t8ss401","code":0,"text":"success","data":"28.5°C"}
+```text
+id:t8ss401
+code:20
+text:success
+data:28.5°C
 ```
